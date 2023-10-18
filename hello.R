@@ -2,7 +2,6 @@ x <- "Hello World"
 
 x
 
-
 install.packages("psych")
 install.packages("descr")
 install.packages("gmodels")
