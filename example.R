@@ -1,2 +1,4 @@
-data = read.csv('data/pt.csv')
-print(data)
+HR = read.csv('HR_comma_sep.csv')
+# print(HR)
+print(summary(HR$salary))
+print(summary(HR$satisfaction_level))
