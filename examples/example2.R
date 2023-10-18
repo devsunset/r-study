@@ -1,8 +1,0 @@
-case = read.csv('data/case.csv')
-head(case,n = 3)
-print(case)
-str(case)
-print(summary(case))
-print(summary(case$longitude))
-case$longitude= as.factor(case$longitude)
-print(summary(case$longitude))
