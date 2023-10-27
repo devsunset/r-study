@@ -265,3 +265,10 @@ gender <- factor(gender)
 gender
 summary(gender)
 
+length(gender)
+length(df$names)
+str(df)
+class(df)
+class(df$names)
+
+
