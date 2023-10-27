@@ -156,6 +156,42 @@ print(a)
 #read.csv("data/data.csv", header=TRUE)
 #write.csv(df,"data.csv",row,names=TRUE)
 
+x <- c(10,20,30)
+pie(x, labels = c("team1","team2","team3"),col=c("red","blue","green"))
 
+x <- c(10,20,30)
+barplot(x, names.arg = c("team1","team2","team3"),col=c("red","blue","green"),xlab="TEAM",ylab="Score")
+
+#women
+x <- (1:10) #women@height
+y <- (1:10) #women@weight
+plot(x, y, xlab="HEIGHT", ylab="WEIGHT")
+  
+boxplot(x, xlab="xxx", ylab="yyy", col="red")
+
+hist(x, xlab="xxx", ylab="yyy")
 
 ### 데이터 구조  
+# scalar , vector , matrix , array, list , data frame , factor 
+
+# scalar 
+x <- 70
+x
+# vector
+x <- c()
+x
+# matrix
+x <- matrix()
+x
+# array
+x <- array()
+x
+# list
+x <- list()
+x
+# data frame
+x <- data.frame()
+x
+# factor
+x <- factor()
+x
