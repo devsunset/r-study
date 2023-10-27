@@ -1,4 +1,5 @@
 library(dplyr)
+#help("dplyr")
 
 x <- "Hello World"
 x
@@ -180,18 +181,87 @@ x
 # vector
 x <- c()
 x
+x <- c(80,80,90)
+x
+x <- c(1:10)
+x
+x <- c("홍길동",20,30,40)
+x
+x <- c(1,2,3)
+x[2] + x[3]
+x <- c("홍길동",20,30,40)
+#x[2] + x[3]
+as.numeric(x[2]) + as.numeric(x[3])
 # matrix
 x <- matrix()
 x
+x <- 1:9
+x
+y <- matrix(x,nrow=3)
+y
+a <- c(1,2,3,4)
+b <- c(5,6,7,8)
+c <- c(9,10,11,12)
+cbind(a,b,c)
+rbind(a,b,c)
+z <- rbind(a,b,c)
+z[2,3]
+as.numeric(z[2,3])
+z[3,2]
+as.numeric(3,2)
+as.numeric(z[2,3])+as.numeric(z[3,2])
+names(z[3,2])
 # array
 x <- array()
 x
+x <- array(1:36, c(4,3,3))
+x
+x[2,2,1] + x[3,1,2] + x[4,3,3]
+print(x[2,2,1])
+print(x[3,1,2])
+print(x[4,3,3])
 # list
 x <- list()
 x
+record <- "My Record"
+names <- c("홍길동","유관순","이순신")
+ages <- c(27,19,35)
+eng <- c(70,85,75)
+math <- c(80,80,90)
+numbers <- matrix(1:9, nrow=3)
+mylist <- list(record, names, ages, eng, math, numbers)
+mylist
+mylist[[2]][2]
+mylist[[3]][3]
+mylist[[4]][1]
+mylist[[6]][2,3]
 # data frame
 x <- data.frame()
 x
+names <- c("홍길동","유관순","이순신")
+ages <- c(27,19,35)
+eng <- c(70,85,75)
+math <- c(80,80,90)
+df <- data.frame(names,ages,eng,math)
+df
+df[1]
+df[3]
+df[1,]
+df[2,]
+df[1,3]
+df[3,2]
+df$names
+df$eng
+rownames(df)
+colnames(df)
+
 # factor
 x <- factor()
 x
+gender <- c(rep("mail",10),rep("femail",15))
+gender
+summary(gender)
+gender <- factor(gender)
+gender
+summary(gender)
+
