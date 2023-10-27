@@ -265,10 +265,26 @@ gender <- factor(gender)
 gender
 summary(gender)
 
+# 데이터 구조함수 
 length(gender)
 length(df$names)
 str(df)
 class(df)
 class(df$names)
+names(df)
+c(1,2,3,4)
+c(df)
+seq(1:10)
+seq(1,10, by=2)
+rep(5,10)
+rep("mail",5)
+a <- c(1,2,3,4)
+b <- c(5,6,7,8)
+z <- cbind(a,b)
+z
+z <- rbind(a,b)
+z
+x <- c("a","d","x","b")
+ls(x)
 
 
