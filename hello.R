@@ -1,3 +1,5 @@
+library(dplyr)
+
 x <- "Hello World"
 x
 
@@ -61,7 +63,7 @@ x
 # install.packages("ggmap")
 ############################################################################
 
-### Basic
+### R 기초 
 
 ## 데이타 유형 및 변수 할당 
 # numeric integer , double 
@@ -123,6 +125,37 @@ a & b
 !b
 isTRUE(b)
 
+a <- c(1:10)
+a
+b <- a^2
+b
+a %>% plot(b)
+
+## 수치계산 및 함수 
+5+4^2
+1:7
+abs(-7)
+x <- c(1,2,3)
+x
+exp(2)
+log(7.389056)
+log10(1000)
+max(1:10)
+min(1:10)
+sample(5)
+mean(1:10)
+rnorm(6)
+mean(rnorm(6))
+median(1:11)
+sd(1:10)
+sqrt(10)
+sum(1:15)
+var(1:10)
+a <- c(1,2,3)
+print(a)
+#read.csv("data/data.csv", header=TRUE)
+#write.csv(df,"data.csv",row,names=TRUE)
 
 
 
+### 데이터 구조  
