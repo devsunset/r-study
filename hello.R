@@ -1,7 +1,7 @@
 x <- "Hello World"
-
 x
-# 
+
+############################################################################
 # install.packages("psych")
 # install.packages("descr")
 # install.packages("gmodels")
@@ -59,7 +59,6 @@ x
 # install.packages("rgeos")
 # install.packages("rgdal")
 # install.packages("ggmap")
-
 ############################################################################
 
 ### Basic
@@ -98,6 +97,32 @@ x <- -Inf
 mode(x)
 
 ## 연산자 
+x <- 6
+y <- 3
+z <- x+y
+z
+.a <- 10
+.b <- 15
+.a + .b
+.a - .b
+.a * .b
+.a / .b
+3^2
+13%%3
+13%/%3
+.a < .b
+.a <= .b
+.a > .b
+.a >= .b
+.a == .b 
+.a != .b
+a <- TRUE
+b <- FALSE
+a | b
+a & b
+!b
+isTRUE(b)
+
 
 
 
