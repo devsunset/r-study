@@ -165,6 +165,7 @@ data$Solar.R <- zscore(data$Solar.R)
 summary(data)
 describe(data)
 
+## 기술통계 분석 
 
 install.packages("descr")
 install.packages("fBasics")
@@ -208,3 +209,77 @@ barplot(fuel_table, main="FUEL", xlab="NumberofSamples")
 labels <- rownames(fuel_table)
 labels
 pie(fuel_table,labels=labels,main="Car Fuel")
+
+usedcars <- read.csv("data/usedcar.csv",header=T, fileEncoding = "EUC-KR")
+data <- subset(usedcars,select=c(km,price))
+head(data)
+length(data$price)
+mean(data$price)
+min(data$price)
+max(data$price)
+range(data$price)
+median(data$price)
+var(data$price)
+sd(data$price)
+CV <- sd(data$price)/mean(data$price)
+CV
+
+quantile(data$price)
+quantile(data$price, 0.05)
+quantile(data$price, 0.5)
+quantile(data$price, 0.95)
+Q1 <- quantile(data$price, 0.25)
+Q3 <- quantile(data$price, 0.75)
+QD <- (Q3-Q1)/2
+QD
+quantile(data$price, probs=c(0.05,0.1,0.25,0.5,0.75,0.9,0.95))
+
+# Mode <- function(x){
+#   u <- unique(x)
+#   u[which.max(tabulate(match(x,u)))]
+# }
+# Mode(data$price)
+# Mode(data$km)
+
+install.packages("prettyR")
+library(prettyR)
+Mode(data$price)
+Mode(data$km)
+summary(data$price)
+summary(data$km)
+
+install.packages("fBasics")
+library(fBasics)
+skewness(data$price)
+skewness(data$km)
+kurtosis(data$price)
+kurtosis(data$km)
+
+describe(data$price)
+help("describe")
+
+install.packages("psych")
+library(psych)
+price_result <- describe(data$price)
+price_result
+km_result <- describe(data$km)
+km_result
+head(data)
+all_result <- describe(data)
+all_result
+
+data <- read.csv("data/data.csv", header=T, fileEncoding="EUC-KR")
+head(data)
+x <- data$쇼핑1월
+y <- data$쇼핑2월
+z <- data$쇼핑3월
+boxplot(x,y,z, names=c("January", "February","March"))
+plot(x,y,xlab="January",ylab="February")
+k=lm(y~x)
+abline(k)
+stem(x)
+stem(y)
+qqnorm(x,main="January")
+qqline(x)
+qqnorm(y,main="February")
+qqline(y)
