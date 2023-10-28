@@ -14,12 +14,14 @@ data <- read.csv("data/data.csv", header=T, fileEncoding="EUC-KR")
 data
 head(data)
 summary(data)
+describe(data)
 edit(data)
 
 data <- read_excel("data/pollution_air.xlsx",sheet="pollution_air", col_names=TRUE)
 data
 head(data)
 summary(data)
+describe(data)
 
 AirPassengers
 iris
@@ -31,3 +33,10 @@ women
 install.packages("MASS")
 library(MASS)
 Boston
+
+options("width"=500)
+data <- read.csv("data/pt.csv",header=T,fileEncoding = "EUC-KR")
+data
+head(data)
+summary(data)
+describe(data)
