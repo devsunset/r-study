@@ -364,4 +364,77 @@ quakes$mag[6]
 quakes$depth[1]+quakes$depth[2]
 
 ### 구조적 프로그래밍 
+a <- 4
+b <- 6
+if (a > b){
+  z <- 2
+}else {
+  z <- 3
+}
+z
+
+z <- ifelse( (a < b), 1, 2) 
+z
+
+sum <- 0
+for (i in 1:10){
+ sum <- sum + i
+}
+sum
+
+sum <- 0
+i <- 1
+while(i <= 10){
+  sum <- sum +i
+  i <- i+1
+}
+sum 
+
+sum <- 0
+i <- 1
+repeat {
+  sum <- sum + i
+  if (i >= 10) break
+  i <- i + 1
+}
+sum 
+
+sum1 <- 0
+sum2 <- 0
+N <- length(quakes$mag)
+N
+for (i in 1:N){
+  if(quakes$mag[i] >= 5.5){
+    sum1 <- sum1 + 1
+  }else if (quakes$mag[i] <= 4.5){
+    sum2 <- sum2 + 1
+  }
+}
+sum1
+sum2
+
+getArea <- function(a, b){
+  area <- a*b/2
+  return(area)
+}
+
+getArea(5,10)
+
+Get_temperature_days <- function(x,y){
+  N <- length(x)
+  low_days <- 0
+  high_days <- 0
+  for (i in 1:N){
+    if(x[i] >= y){
+      high_days <- high_days +1
+    }else{
+      low_days <- low_days + 1
+    }
+    c(high_days, low_days)
+    print(c)
+  }
+}
+
+temperature <- c(18.5,24.1,26.0,22.1,24,3,20.2,20.8,24.6,18.2,20.0,24.8)
+Get_temperature_days(temperature,24)
 
