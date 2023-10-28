@@ -164,3 +164,19 @@ summary(data)
 data$Solar.R <- zscore(data$Solar.R)
 summary(data)
 describe(data)
+
+
+install.packages("descr")
+install.packages("fBasics")
+install.packages("prettyR")
+install.packages("psych")
+library(descr)
+library(fBasics)
+library(prettyR)
+library("psych")
+
+getwd()
+usedcars <- read.csv("data/usedcars.csv", header=T,fileEncoding = "EUC-KR")
+usedcars
+
+
