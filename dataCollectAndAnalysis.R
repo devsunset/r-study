@@ -176,7 +176,35 @@ library(prettyR)
 library("psych")
 
 getwd()
-usedcars <- read.csv("data/usedcars.csv", header=T,fileEncoding = "EUC-KR")
-usedcars
+usedcars <- read.csv("data/usedcar.csv", header=T,fileEncoding = "EUC-KR")
+head(usedcars)
+data <- subset(usedcars,select=c(maker,fuel))
+head(data)
+maker_freq <- table(data$maker)
+maker_freq
+maker_prob <- prop.table(maker_freq)*100
+maker_prob
+maker_prob_round <- round(maker_prob,1)
+maker_prob_round
+table_frequency <- cbind(frequency=maker_freq, percent=maker_prob_round)
+table_frequency
 
-
+install.packages("descr")
+library(descr)
+table1 <- freq(data$maker,plot=FALSE)
+table1
+table2 <- freq(data$maker, plot=TRUE)
+maker_frequency <- table(data$maker)
+head(maker_frequency)
+barplot(maker_frequency, main="MAKER",xlab="NumberofSamples")
+labels <- rownames(maker_frequency)
+labels
+pie(maker_frequency, labels=labels, main="Car Maker")
+fuel_frequency <- freq(data$fuel, plot=FALSE)
+fuel_frequency
+fuel_table <- table(data$fuel)
+fuel_table
+barplot(fuel_table, main="FUEL", xlab="NumberofSamples")
+labels <- rownames(fuel_table)
+labels
+pie(fuel_table,labels=labels,main="Car Fuel")
