@@ -96,25 +96,19 @@ a <- c(1,2,3)
 print(a)
 #read.csv("data/data.csv", header=TRUE)
 #write.csv(df,"data.csv",row,names=TRUE)
-
 x <- c(10,20,30)
 pie(x, labels = c("team1","team2","team3"),col=c("red","blue","green"))
-
 x <- c(10,20,30)
 barplot(x, names.arg = c("team1","team2","team3"),col=c("red","blue","green"),xlab="TEAM",ylab="Score")
-
 #women
 x <- (1:10) #women@height
 y <- (1:10) #women@weight
 plot(x, y, xlab="HEIGHT", ylab="WEIGHT")
-  
 boxplot(x, xlab="xxx", ylab="yyy", col="red")
-
 hist(x, xlab="xxx", ylab="yyy")
 
 ### 데이터 구조  
 # scalar , vector , matrix , array, list , data frame , factor 
-
 # scalar 
 x <- 70
 x
@@ -261,3 +255,40 @@ a <- c(1,2,3,4)
 a
 a <- append(a,c(5,6,7,8))
 a
+a <- data.frame("a",c(1,2,3),"b",c(4,5,6),"c",c(7,8,9))
+a
+a <- stack(a)
+a
+a <- unstack(a)
+a
+nrow(a)
+ncol(a)
+rownames(a)
+colnames(a)
+dim(a)
+head(a)
+tail(a)
+date()
+Sys.Date()
+mydates <- as.Date(c("2023-10-29","2023-10-30"))
+mydates[1]
+days <- mydates[1]-mydates[2]
+days
+format(Sys.Date(),format="%B %d %Y")
+format(Sys.Date(),format="%b %d %y")
+format(date(), format="%a %B %d % Y")
+format(Sys.Date(), format="%a %b %d %y")
+format(Sys.Date(), format="%A %b %d %y")
+format(Sys.Date(), format="%a %m %d %y")
+format(Sys.Date(), format="%b %d %y")
+format(Sys.Date(), format="%B %d %y")
+format(Sys.Date(), format="%B %d %y")
+format(Sys.Date(), format="%B %d %Y")
+x <- c(5,1,3,2,3,4)
+x
+order(x)
+sort(x)
+order(-x)
+sort(-x)
+quantile(x)
+IQR(x)
