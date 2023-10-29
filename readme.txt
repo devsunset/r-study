@@ -24,5 +24,6 @@ https://wikidocs.net/book/4315
 
 basic.R
 dataCollectAndAnalysis.R
+dataModel.R
 
 
