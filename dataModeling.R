@@ -98,3 +98,15 @@ regression_model<- lm(DriversKilled~drivers+front+rear+kms+PetrolPrice,data)
 names(regression_model)
 summary(regression_model)
 accuracy(regression_model)
+
+data <- data.frame(Seatbelts)
+head(data)
+step(lm(DriversKilled~drivers+front+rear+kms+PetrolPrice,data,direction="forward"))
+
+data <-data.frame(attitude)
+head(data)
+step(lm(rating~complaints+privileges+learning+critical,data,direction="backward"))
+
+data <- data.frame(mtcars)
+head(data)
+step(lm(mpg~cyl+hp+wt+qsec+carb,data,direction="both"))
