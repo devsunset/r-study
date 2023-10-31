@@ -14,7 +14,6 @@ cor.test(mtcars$wt,mtcars$mpg)
 
 data <- data.frame(mtcars$mpg, mtcars$wt, mtcars$gear, mtcars$disp, mtcars$drat)
 data
-
 pearson_result <- rcorr(as.matrix(data), type="pearson")
 pearson_result
 
@@ -26,6 +25,7 @@ sci <- c(2,6,5,4,1,3)
 data <- data.frame(kor,math,eng,soc,sci)
 data
 qqplot(data,aes(math,eng))+geom_point()
+
 cov(data$math, data$eng, method="spearman")
 cor(data$math, data$eng, method="spearman")
 cor.test(data$math, data$eng, method="spearman")
@@ -38,9 +38,11 @@ library(forecast)
 
 women
 plot(women$height,women$weight,xlab="Height(inches)", ylab="Weight(pounds", type="o")
+
 regression_result <- lm(weight~height,women)
 summary(regression_result)
 confint(regression_result,level=0.95)
+
 pred <- predict(regression_result, newdata=data.frame(height=67))
 pred
 coef(regression_result)
@@ -59,5 +61,40 @@ plot(data$front,data$DriversKilled, type="p")
 plot(data$DriversKilled,data$drivers, type="p")
 plot(data$DriversKilled,data$front, type="p")
 plot(data$DriversKilled,data$DriversKilled, type="p")
+
 regression_result <- lm(DriversKilled~drivers+front+rear+kms+PetrolPrice,data)
 summary(regression_result)
+confint(regression_result, level=0.95)
+
+data <- data.frame(Seatbelts)
+regression_result <- lm(DriversKilled~drivers+front+rear+kms+PetrolPrice,data)
+coef(regression_result)
+pred <- predict(regression_result,newdata=data.frame(drivers=1632, front=991, rear=454, kms=11823, PetrolPrice=0.1010197))
+pred
+actual_value = data$DriversKilled[5]
+actual_value
+(actual_value-pred)/actual_value*100
+
+data <- data.frame(Seatbelts)
+head(data)
+data$pred <- -19.52 + 0.08499+data$drivers - 0.01468*data$front + 0.01899*data$rear + 0.0004981*data$kms - 23.46*data$PetrolPrice
+head(data)
+me <- mean(data$DriversKilled - data$pred)
+me
+mse <- mean(data$DriversKilled - data$pred) * (data$DriversKilled - data$pred)
+mse
+rmse <- sqrt(mse)
+rmse
+mae <- mean(abs(data$DriversKilled - data$pred))
+mae
+mpe <- mean(data$DriversKilled - data$pred)/data$DriversKilled
+mpe
+mape <- mean(abs((data$DriversKilled-data$pred)/data$DriversKilled))
+mape
+
+data <- data.frame(Seatbelts)
+head(data)
+regression_model<- lm(DriversKilled~drivers+front+rear+kms+PetrolPrice,data)
+names(regression_model)
+summary(regression_model)
+accuracy(regression_model)
