@@ -20,8 +20,9 @@ https://www.yes24.com/Product/Goods/119487224
 ########################################################
 ### Study
 
-basic.R
+dataBasic.R
 dataCollectAndAnalysis.R
-dataModel.R
+dataModeling.R
+dataModelEvaluation.R
 
 
