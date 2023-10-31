@@ -17,8 +17,6 @@ https://posit.co/ (Rstudio)
 2023 빅데이터분석기사 실기 한권으로 끝내기
 https://www.yes24.com/Product/Goods/119487224
 
-https://wikidocs.net/book/4315
-
 ########################################################
 ### Study
 
