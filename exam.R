@@ -1,0 +1,22 @@
+install.packages("ggplot2")
+library(ggplot2)
+
+df <- c(1,2,3,4,5)
+print(min(df))
+print(max(df))
+print(mean(df))
+print(median(df))
+print(sd(df))
+print(sum(df))
+#print(n(df))
+
+a <- read.csv("data/country.csv")
+
+print(head(a))
+print(tail(a))
+print(head(a,10))
+print(tail(a,10))
+#print(View(a))
+print(dim(a))
+print(str(a))
+print(summary(a))
