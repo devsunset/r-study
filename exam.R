@@ -190,3 +190,32 @@ data$Petal.Length <- zscore(data$Petal.Length)
 # data$Petal.Length <- ((data$Petal.Length - mean(data$Petal.Length))/sd(data$Petal.Length))
 # print(summary(data))
 print(mean(data$Petal.Length))
+
+#########################################################################
+data <- subset(iris, Species =='versicolor' | Species =='virginica')
+print(dim(data))
+print(summary(data))
+median_sepal <- median(data$Sepal.Length)
+print(median_sepal)
+median_petal <- median(data$Petal.Length)
+print(median_petal)
+result1 <- data$Sepal.Length >= median_sepal & data$Species == "versicolor"
+print(sum(result1))
+result2 <- data$Petal.Length >= median_petal & data$Species == "virginica"
+print(sum(result2))
+print(nrow(data[data$Species=="versicolor",]))
+ratio_versicolor <- sum(result1) / nrow(data[data$Species=="versicolor",])
+print(ratio_versicolor)
+ratio_virginica <- sum(result2) / nrow(data[data$Species=="virginica",])
+print(ratio_virginica)
+print(ratio_virginica - ratio_versicolor)
+
+#########################################################################
+data <- subset(iris, Species =='setosa')
+print(dim(data))
+median_sepal <- median(data$Sepal.Length)
+print(median_sepal)
+data$add_data <- ifelse(data$Sepal.Length > median_sepal ,1, 0)
+print(head(data))
+print(mean(data$Sepal.Length[data$add_data==1]))
+
