@@ -178,6 +178,7 @@ minmax <- function(x){
 	return ((x-min(x))/(max(x)-min(x)))
 }
 data$Petal.Length <- minmax(data$Petal.Length)
+# data$Petal.Length <-((data$Petal.Length-min(data$Petal.Length))/(max(data$Petal.Length)-min(data$Petal.Length)))
 # print(summary(data))
 print(mean(data$Petal.Length))
 
@@ -185,6 +186,7 @@ data <- subset(iris,Species == 'setosa')
 zscore <- function (x) {
 	return ((x-mean(x))/sd(x))
 }
-data$Petal.Length <- zscore(data$Patal.Length)
+data$Petal.Length <- zscore(data$Petal.Length)
+# data$Petal.Length <- ((data$Petal.Length - mean(data$Petal.Length))/sd(data$Petal.Length))
 # print(summary(data))
 print(mean(data$Petal.Length))
