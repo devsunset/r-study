@@ -7,6 +7,12 @@ library(psych)
 install.packages("caret")
 library(caret)
 
+install.packages("e1071")
+library(e1071)
+
+install.packages("pROC")
+library(pROC)
+
 #########################################################################
 #
 #   STUDY TYPE 1
@@ -412,16 +418,16 @@ print(sum(result))
 data <- read.csv("data/Ionosphere.csv", header=T)
 data <- data.frame(data)
 data <- subset(data, select=c(-V1,-V2))
-
 data <- na.omit(data)
+
 data$Class <- as.numeric(data$Class)
 id <- sample(1:nrow(data),as.integer(0.7*nrow(data)))
 train <- data[id,]
 test <- data[-id,]
 
 model <- glm(Class ~., data=train)
-new <- data.frame(actual = test$Class)
 
+new <- data.frame(actual = test$Class)
 new$predict <- round(predict(model,test),0)
 new[(new[0,2]==0),]
 new <- subset(new, !(new$predict ==0))
@@ -430,10 +436,71 @@ new$predict <- as.factor(new$predict)
 
 confusionMatrix(new$predict,new$actual)
 
-plot.roc(new$actual, as.integer(new$predict), legacy.axes = TRUE)
+#plot.roc(new$actual, as.integer(new$predict), legacy.axes = TRUE)
 roc(new$actual, as.integer(new$predict))$auc
 
 #########################################################################
+data <- read.csv("data/Ionosphere.csv", header=T)
+data <- data.frame(data)
+data <- subset(data, select=c(-V1,-V2))
+data <- na.omit(data)
+
+id <- sample(1:nrow(data),as.integer(0.7*nrow(data)))
+train <- data[id,]
+test <- data[-id,]
+
+model <- svm(Class ~., train, type="C-classification", kernel="radial", cost=10, gamma=0.1)
+
+new <- data.frame(actual=test$Class)
+new$predict <- predict(model,test, decision.values = TRUE)
+head(new)
+new$actual <- as.factor(new$actual)
+new$predict <- as.factor(new$predict)
+
+confusionMatrix(new$predict, new$actual)
+
+#plot.roc(new$actual, as.integer(new$predict), legacy.axes=TRUE)
+roc(new$actual, as.integer(new$predict))$auc
+
+svmtune <- tune.svm(factor(Class) ~., data=train, gamma=c(0.1,2), cost=c(5, 15))
+svmtune
+summary(svmtune)
+
+model <- svm(Class~., train, type="C-classification",kernel="radial",cost=15,gamma=0.1)
+new <- data.frame(actual=test$Class)
+new$predict <- predict(model, test, decision.values = TRUE)
+new$actual <- as.factor(new$actual)
+new$predict <- as.factor(new$predict)
+
+confusionMatrix(new$predict, new$actual)
+
+#setwd("result")
+#write.csv(new,"980415.csv")
+#result <- read.csv("980415.csv", header=T, fileEncoding = "EUC-KR")
+#View(result)
+
+#########################################################################
+data <- read.csv("data/Ionosphere.csv", header=T)
+data <- data.frame(data)
+data <- subset(data, select=c(-V1,-V2))
+data <- na.omit(data)
+
+id <- sample(1:nrow(data), as.integer(0.7*nrow(data)))
+train <- data[id,]
+test <- data[-id,]
+
+model <- naiveBayes(Class ~., train)
+
+new <- data.frame(actual=test$Class)
+new$predict <- predict(model,test)
+new$actual <- as.factor(new$actual)
+new$predict <- as.factor(new$predict)
+
+confusionMatrix(new$predict, new$actual)
+
+#plot.roc(new$actual, as.integer(new$predict), legacy.axes=TRUE)
+
+roc(new$actual, as.integer((new$predict)))$auc
 
 #########################################################################
 
@@ -443,6 +510,14 @@ roc(new$actual, as.integer(new$predict))$auc
 
 #########################################################################
 
+#########################################################################
+
+#########################################################################
+
+#########################################################################
+#
+#   STUDY TYPE 3
+#
 #########################################################################
 
 #########################################################################
