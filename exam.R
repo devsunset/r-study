@@ -627,7 +627,7 @@ model <- lm(Population ~ Income+Illiteracy+Life.Exp+Murder+HS.Grad+Frost, data)
 summary(model)
 
 new <- data.frame(actual = data$Population)
-new$predict <- -90796.639+2.501*data$Income-3416.368I*data$lliteracy+1353.677*data$Life.Exp+862.094*data$Murder-219.665*data$HS.Gard-25.785*data$Frost
+new$predict <- -90796.639+2.501*data$Income-3416.368*data$Illiteracy+1353.677*data$Life.Exp+862.094*data$Murder-219.665*data$HS.Gard-25.785*data$Frost
 head(new)
 
 accuracy(new$actual, new$predict)
@@ -717,8 +717,8 @@ id <- sample(1:nrow(data), as.integer(0.7*nrow(data)))
 train <- data[id, ]
 test <- data[-id, ]
 
-###
-model <- tree(Reached.on.Time_Y.N - Customer_care_calls+.....)
+model <- tree(Reached.on.Time_Y.N - Customer_care_calls+Customer_rating+Cost_of_the_Product+Prior_purchases+Weight_in_gms,train)
+
 summary(model)
 
 names(model)
