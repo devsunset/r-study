@@ -703,8 +703,58 @@ accuracy(new$actual, new$predict)
 plot(model)
 
 #########################################################################
+data <- read.csv("data/train_commerce.csv", header=T)
+data <- na.omit(data)
+data <- data[,-1]
+summary(data)
+#head(data)
+#dim(data
 
-#########################################################################
+data$Reached.on.Time_Y.N <- as.factor(data$Reached.on.Time_Y.N)
+str(data)
+
+id <- sample(1:nrow(data), as.integer(0.7*nrow(data)))
+train <- data[id, ]
+test <- data[-id, ]
+
+###
+model <- tree(Reached.on.Time_Y.N - Customer_care_calls+.....)
+summary(model)
+
+names(model)
+nrow(train)
+nrow(test)
+plot(model)
+text(model)
+
+new <- data.frame(actual = test$Reached.on.Time_Y.N)
+new$predict <- predict(model, test, type='class')
+head(new)
+
+confusionMatrix(new$predict, new$actual)
+plot.roc(new$actual, as.integer(new$predict), legacy.axes=TRUE)
+
+result <- roc(new$actual, as.integer(new$predict))
+result
+names(result)
+result$auc
+
+cvtree <- cv.tree(model, FUN=prune.misclass)
+plot(cvtree)
+
+prunetree <- prune.misclass(model, best=5)
+plot(prunetree)
+text(prunetree)
+
+new <- data.frame(actual = test$Reached.on.Time_Y.N)
+new$predict <- predict(prunetree, test, type='class')
+head(new)
+
+confusionMatrix(new$predict, new$actual)
+#write.csv(new, "980415.csv")
+#confirm <- read.csv("980415.csv", header=T)
+#head(confirm)
+#View(confirm)
 
 #########################################################################
 #
