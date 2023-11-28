@@ -176,3 +176,73 @@ mean <- mean(data$price)
 mean
 
 #########################################################################
+data <- read.csv("data/diamonds.csv")
+data <- subset(data, depth >=60 & table >=60)
+data <- data[order(-data$price),]
+data <- data[1:100,]
+dim(data)
+max_v <- max(data$price)
+min_v <- min(data$price)
+print(max_v - min_v)
+
+#########################################################################
+data <- read.csv("data/diamonds.csv")
+data <- subset(data, cut == 'Ideal')
+dim(data)
+c1 <- cor(data$x,data$price)
+c1
+c2 <- cor(data$y,data$price)
+c2
+c3 <- cor(data$z,data$price)
+c3
+result <- data.frame(c1,c2,c3)
+result
+result$max_cor <- max(result)
+result
+setwd("result")
+write.csv(result,"cor.csv",row.names=TRUE)
+check <- read.csv("cor.csv",header=T, fileEncoding="EUC-KR")
+check
+View(check)
+par(mfrow=c(1,3))
+plot(data$x, data$price, type="p")
+plot(data$y, data$price, type="l")
+plot(data$z, data$price, type="b")
+
+#########################################################################
+data <- read.csv("data/diamonds.csv")
+data <- subset(data, carat >= 1 & cut == 'Premium')
+data <- data[order(-data$price),]
+data <- data[1:100,]
+dim(data)
+f <- sum(data$color =="F") / nrow(data)
+f
+g <- sum(data$color =="G") / nrow(data)
+g
+h <- sum(data$color =="H") / nrow(data)
+h
+result <- data.frame(f,g,h,max(f,g,h))
+result
+setwd("result")
+write.csv(result,"color.csv",row.names=FALSE)
+check <- read.csv("color.csv", header=T)
+check
+View(check)
+
+#########################################################################
+
+#########################################################################
+
+#########################################################################
+
+#########################################################################
+
+#########################################################################
+
+#########################################################################
+
+#########################################################################
+
+#########################################################################
+
+#########################################################################
