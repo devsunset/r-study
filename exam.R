@@ -4,6 +4,9 @@ library(ggplot2)
 install.packages("psych")
 library(psych)
 
+install.packages("caret")
+library(caret)
+
 #########################################################################
 #
 #   STUDY TYPE 1
@@ -406,7 +409,29 @@ print(sum(result))
 #   STUDY TYPE 2
 #
 #########################################################################
+data <- read.csv("data/Ionosphere.csv", header=T)
+data <- data.frame(data)
+data <- subset(data, select=c(-V1,-V2))
 
+data <- na.omit(data)
+data$Class <- as.numeric(data$Class)
+id <- sample(1:nrow(data),as.integer(0.7*nrow(data)))
+train <- data[id,]
+test <- data[-id,]
+
+model <- glm(Class ~., data=train)
+new <- data.frame(actual = test$Class)
+
+new$predict <- round(predict(model,test),0)
+new[(new[0,2]==0),]
+new <- subset(new, !(new$predict ==0))
+new$actual <- as.factor(new$actual)
+new$predict <- as.factor(new$predict)
+
+confusionMatrix(new$predict,new$actual)
+
+plot.roc(new$actual, as.integer(new$predict), legacy.axes = TRUE)
+roc(new$actual, as.integer(new$predict))$auc
 
 #########################################################################
 
