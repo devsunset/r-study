@@ -130,3 +130,49 @@ sum(result2, na.rm = TRUE)
 print(mean(data$Solar.R[result2], na.rm = TRUE))
 
 print(sum(result1, na.rm = TRUE)+sum(result2, na.rm = TRUE))
+
+#########################################################################
+data <- airquality[order(-airquality$Solar.R),]
+# head(data)
+# summary(data)
+data <- data[1:(nrow(data)*0.8),]
+# nrow(data)
+# summary(data)
+# dim(data)
+median_before <- median(data$Ozone, na.rm = TRUE)
+median_before
+mean <- mean(data$Ozone, na.rm = TRUE)
+mean
+data$Ozone <- ifelse(is.na(data$Ozone),mean,data$Ozone)
+# summary(data)
+median_after <- median(data$Ozone)
+median_after
+print(median_before - median_after)
+
+#########################################################################
+data <- na.omit(airquality)
+summary(data)
+q <- quantile(data$Ozone)
+q
+str(q)
+data$Ozone <- ifelse(data$Ozone >=q[4] | data$Ozone <= q[2],0,data$Ozone)
+summary(data)
+print(mean(data$Ozone)+sd(data$Ozone))
+
+#########################################################################
+data <- read.csv("data/diamonds.csv")
+# head(data)
+# summary(data)
+# describe(data)
+# dim(data)
+# str(data)
+data <- data[order(-data$price),]
+dim(data)
+data <- data[1:200,]
+nrow(data)
+data <- subset(data, cut=="Premium")
+dim(data)
+mean <- mean(data$price)
+mean
+
+#########################################################################
