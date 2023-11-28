@@ -230,8 +230,35 @@ check
 View(check)
 
 #########################################################################
+data <- read.csv("data/Boston.csv")
+dim(data)
+data <- data[order(-data$medv),]
+print(data$medv[1:20])
+data$medv <- ifelse(data$medv == max(data$medv), median(data$medv), data$medv)
+print(data$medv[1:20])
+data_age80 <- data[data$age >=80,]
+dim(data_age80)
+result <- mean(data_age80$medv)
+print(result)
+data <- read.csv("data/Boston.csv")
+check <- data[data$age >= 80,]
+check_mean <- mean(check$medv)
+print(check_mean)
 
 #########################################################################
+presidents
+str(presidents)
+summary(presidents)
+data <- matrix(presidents, ncol=4, byrow=TRUE)
+data <- data.frame(data)
+names(data) <- c("Qtr1","Qtr2","Qtr3","Qtr4")
+data
+result <- is.na(data)
+head(result)
+no_na <- apply(result, 2, sum)
+no_na
+print(max(no_na))
+summary(data)
 
 #########################################################################
 
