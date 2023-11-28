@@ -303,8 +303,77 @@ print(outlier)
 boxplot(data$precip)
 
 #########################################################################
+data <- read.csv("data/housing.csv", header=T, fileEncoding="EUC-KR")
+# data
+# summary(data)
+median_value <- median(data$total_bedrooms, na.rm = T)
+median_value
+data$total_bedrooms <- ifelse(is.na(data$total_bedrooms),median_value,data$total_bedrooms)
+data1 <- data
+summary(data1)
+mean_value <- mean(data1$total_bedrooms)
+mean_value
+sd_value <- sd(data1$total_bedrooms)
+sd_value
+low <- mean_value - sd_value  * 1.5
+low
+upper <- mean_value + sd_value * 1.5
+upper
+result <- data1$total_bedrooms >= upper | data1$total_bedrooms <= low
+result
+outlier <- data$total_bedrooms[result]
+outlier
+print(mean(outlier))
+boxplot(data1$total_bedrooms)
 
 #########################################################################
+data <- read.csv("data/train_commerce.csv", header=T)
+dim(data)
+
+d1 <- data[order(-data$Customer_care_calls),][1:500,]
+dim(d1)
+d1_rate <- sum(ifelse(d1$Reached.on.Time_Y.N == 1, 1, 0))/nrow(d1)
+d1_rate
+
+d2 <- data[order(-data$Cost_of_the_Product),][1:500,]
+dim(d2)
+d2_rate <- sum(ifelse(d2$Reached.on.Time_Y.N == 1, 1, 0))/nrow(d2)
+d2_rate
+
+d3 <- data[order(-data$Weight_in_gms),][1:500,]
+dim(d3)
+d3_rate <- sum(ifelse(d3$Reached.on.Time_Y.N == 1, 1, 0))/nrow(d3)
+d3_rate
+
+a <- c(d1_rate,d2_rate,d3_rate,max(d1_rate,d2_rate,d3_rate))
+a
+
+d1_cor <- cor(d1$Customer_care_calls,d1$Reached.on.Time_Y.N)
+d1_cor
+d2_cor <- cor(d2$Cost_of_the_Product,d2$Reached.on.Time_Y.N)
+d2_cor
+d3_cor <- cor(d3$Weight_in_gms,d3$Reached.on.Time_Y.N)
+d3_cor
+
+b <- c(d1_cor,d2_cor,d3_cor,max(d1_cor,d2_cor,d3_cor))
+b
+
+result <- data.frame(rbind(a,b))
+result
+
+colnames(result) <- c("Care_calls","Cost_product","Weight","Max")
+rownames(result) <- c("Ration_onTime", "Correlation")
+
+result
+# setwd("")
+# write.csv("result","result.csv",row.names=TRUE)
+# check <- read.csv("result.csv",header=T, fileEncoding="EUC-KR")
+# check
+# View(check)
+# par(mfrow=c(1,3))
+# plot(d1$Customer_care_calls,d1$Reached.on.Time_Y.N)
+# plot(d2$Cost_of_the_Product,d2$Reached.on.Time_Y.N
+# plot(d3$Weight_in_gms,d3$Reached.on.Time_Y.N
 
 #########################################################################
 
