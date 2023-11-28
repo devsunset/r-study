@@ -376,10 +376,50 @@ result
 # plot(d3$Weight_in_gms,d3$Reached.on.Time_Y.N
 
 #########################################################################
+data <- read.csv("data/insurance.csv", header=T)
+dim(data)
+mean_v <- mean(data$bmi)
+mean_v
+sd_v <- sd(data$bmi)
+sd_v
+upper <- mean_v + 1.5 * sd_v
+upper
+low <- mean_v - 1.5 * sd_v
+low
+
+outlier <- data$bmi >= upper | data$bmi <= low
+# outlier
+
+result <- data$bmi[outlier]
+# result
+print(mean(result))
+# boxplot(data$bmi)
 
 #########################################################################
+data <- read.csv("data/country.csv", header=T)
+dim(data)
+# summary(data)
+# str(data)
+data_naomit <- na.omit(data)
+data_naomit
+
+mean <- apply(data_naomit[9,c(2:8)],1, mean)
+mean
+n <- 0
+for (i in 2:length(data_naomit)){
+    if(data_naomit[9,i]>mean) n <- n+1
+    print(n)
+}
+result <- ifelse(data_naomit[9,-1] > mean, TRUE, FALSE)
+result
+print(sum(result))
 
 #########################################################################
+#
+#   STUDY TYPE 2
+#
+#########################################################################
+
 
 #########################################################################
 
