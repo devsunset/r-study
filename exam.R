@@ -6,7 +6,7 @@ library(psych)
 
 #########################################################################
 #
-#   TYPE 1
+#   STUDY TYPE 1
 #
 #########################################################################
 a <- read.csv("data/mtcars.csv")
@@ -261,6 +261,25 @@ print(max(no_na))
 summary(data)
 
 #########################################################################
+# library(psych)
+# describe(state.x77$Income)
+# head(state.x77)
+# str(state.x77)
+minmax <- function (x){
+    return ((x - min(x))/(max(x)-min(x)))
+}
+data <- data.frame(state.x77)
+# data
+result <- minmax(data$Income)
+head(result)
+print(sum(result > 0.5))
+length(result)
+zscore <- function (x) {
+    return ((x - mean(x))/sd(x))
+}
+result <- zscore(data$Income)
+head(result)
+print(sum(result > 0))
 
 #########################################################################
 
