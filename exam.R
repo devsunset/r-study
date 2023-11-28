@@ -670,6 +670,37 @@ new
 accuracy(new$actual, new$predict)
 
 #########################################################################
+data <- data.frame(state.x77)
+
+id <- sample(1:nrow(data), as.integer(0.7*nrow(data)))
+train <- data[id,]
+test <- data[-id,]
+
+normalize <- function (x){
+  return ((x-min(x))/(max(x)-min(x)))
+}
+
+norm_train <- as.data.frame(lapply(train,normalize))
+norm_test <- as.data.frame(lapply(test,normalize))
+norm_train$Population <- train$Population
+
+model <- neuralnet(Population-Income+lliteracy+Life.Exp+Murder+HS.Grade+Frost, norm_train)
+plot(model)
+
+new <- data.frame(actual=test$Population)
+new$predict <- compute(model, norm_test[-length(norm_test)])$net.result
+new
+
+accuracy(new$actual, new$predict)
+cor(new$actual, new$predict)
+
+model <- neuralnet(Population-Income+lliteracy+Life.Exp+Murder+HS.Grade+Frost, norm_train, hidden=c(3,3))
+new <- data.frame(actual=test$Population)
+new$predict <- compute(model, norm_test[-length(norm_test)])$net.result
+new
+
+accuracy(new$actual, new$predict)
+plot(model)
 
 #########################################################################
 
