@@ -27,6 +27,9 @@ library(randomForest)
 install.packages("party")
 library(party)
 
+install.packages("tree")
+library(tree)
+
 #########################################################################
 #
 #   STUDY TYPE 1
@@ -612,8 +615,59 @@ plot(predict)
 #View(result)
 
 #########################################################################
+#class(state.x77)
+#data <- data.frame(state.x77)
+#head(data)
+#summary(data)
+#describe(data)
+
+data <- data.frame(state.x77)
+
+model <- lm(Population ~ Income+Illiteracy+Life.Exp+Murder+HS.Grad+Frost, data)
+summary(model)
+
+new <- data.frame(actual = data$Population)
+new$predict <- -90796.639+2.501*data$Income-3416.368I*data$lliteracy+1353.677*data$Life.Exp+862.094*data$Murder-219.665*data$HS.Gard-25.785*data$Frost
+head(new)
+
+accuracy(new$actual, new$predict)
+cor(new$actual, new$predict)
+plot(new$actual, new$predict)
+abline(lm(new$predict~new$actual))
 
 #########################################################################
+data <- data.frame(state.x77)
+
+id <- sample(1:nrow(data), as.integer(0.7*nrow(data)))
+train <- data[id,]
+test <- data[-id,]
+
+model <- ctree(Population-Income+lliteracy+Life.Exp+Murder+HS.Grade+Frost, train)
+plot(model)
+
+new <- data.frame(actual = test$Population)
+new$predict <- predict(model, test)
+new
+
+plot(new$actual, new$predict)
+abline(lm(new$predict~new$actual))
+
+model <- rpart(Population~Income+lliteracy+Life.Exp+Murder+HS.Grade+Frost, train)
+rpart.plot(model)
+
+new <- data.frame(actual = test$Population)
+new$predict <- predict(model, test)
+new
+accuracy(new$actual, new$predict)
+
+model <- tree(Population~Income+lliteracy+Life.Exp+Murder+HS.Grade+Frost, train)
+plot(model)
+text(model)
+
+new <- data.frame(actual =  test$Population)
+new$predict <- predict(model, test)
+new
+accuracy(new$actual, new$predict)
 
 #########################################################################
 
