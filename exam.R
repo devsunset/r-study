@@ -930,5 +930,45 @@ props_result <- prop.test(x,n)
 props_result
 
 #########################################################################
+data <- read.csv("data/data.csv", header=T, fileEncoding="EUC-KR")
+data <- subset(data, select=c(주거지역, 이용만족도))
+head(data)
+
+data1 <- subset(data, data$주거지역 == "소도시")
+data2<- subset(data, data$주거지역 == "중도시")
+data3<- subset(data, data$주거지역 == "대도시")
+
+aov_result <- aov(이용만족도 ~ 주거지역 , data)
+aov_result
+summary(aov_result)
+
+data <- read.csv("data/data.csv", header=T, fileEncoding="EUC-KR")
+data <- subset(data, select=c(주거지역, 쇼핑만족도))
+ 
+aov_result <- aov(쇼핑만족도 ~ 주거지역 , data)
+aov_result
+summary(aov_result)
+
+
+data <- read.csv("data/data.csv", header=T, fileEncoding="EUC-KR")
+aov_data <- as.data.frame(rbind(cbind(data$이용만족도, 1), cbind(data$쇼핑만족도,2)))
+
+colnames(aov_data) <- c("만족도","구분")
+head(aov_data)
+
+aov_result <- aov(만족도~구분, aov_data)
+aov_result
+summary(aov_result)
+
+
+data <- read.csv("data/data.csv", header=T, fileEncoding="EUC-KR")
+aov_data <- as.data.frame(rbind(cbind(data$품질, 1), cbind(data$가격,2), cbind(data$서비스,3), cbind(data$배송,4)))
+
+colnames(aov_data) <- c("만족도","구분")
+head(aov_data)
+
+aov_result <- aov(만족도~구분, aov_data)
+aov_result
+summary(aov_result)
 
 #########################################################################
