@@ -211,7 +211,7 @@ describe(data)
 mean(data$r_after-data$r_before)
 round(mean(data$r_after-data$r_before),2)
 
-t_result <- t.test(data$h_after , data$h_before, alternative="greater", paired=TRUE)
+t_result <- t.test(data$r_after , data$r_before, alternative="greater", paired=TRUE)
 t_result
 
 summar(t_result)
