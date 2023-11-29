@@ -1,5 +1,4 @@
 #########################################################################
-
 install.packages("ggplot2")
 library(ggplot2)
 
@@ -29,6 +28,7 @@ library(party)
 
 install.packages("tree")
 library(tree)
+#########################################################################
 
 #########################################################################
 #
@@ -53,7 +53,7 @@ print(mean(data$mpg)+sd(data$hp))
 #########################################################################
 a <- read.csv("data/mtcars.csv")
 data <- subset(a, am == 0)
-# print(boxplot(a))
+print(boxplot(a))
 q <- quantile(data$mpg)
 print(q)
 print(q[4] - q[2])
@@ -82,7 +82,6 @@ minmax <- function(x){
 }
 data$Petal.Length <- minmax(data$Petal.Length)
 # data$Petal.Length <-((data$Petal.Length-min(data$Petal.Length))/(max(data$Petal.Length)-min(data$Petal.Length)))
-# print(summary(data))
 print(mean(data$Petal.Length))
 
 data <- subset(iris,Species == 'setosa')
@@ -91,7 +90,6 @@ zscore <- function (x) {
 }
 data$Petal.Length <- zscore(data$Petal.Length)
 # data$Petal.Length <- ((data$Petal.Length - mean(data$Petal.Length))/sd(data$Petal.Length))
-# print(summary(data))
 print(mean(data$Petal.Length))
 
 #########################################################################
@@ -146,18 +144,12 @@ print(sum(result1, na.rm = TRUE)+sum(result2, na.rm = TRUE))
 
 #########################################################################
 data <- airquality[order(-airquality$Solar.R),]
-# head(data)
-# summary(data)
 data <- data[1:(nrow(data)*0.8),]
-# nrow(data)
-# summary(data)
-# dim(data)
 median_before <- median(data$Ozone, na.rm = TRUE)
 median_before
 mean <- mean(data$Ozone, na.rm = TRUE)
 mean
 data$Ozone <- ifelse(is.na(data$Ozone),mean,data$Ozone)
-# summary(data)
 median_after <- median(data$Ozone)
 median_after
 print(median_before - median_after)
@@ -174,11 +166,6 @@ print(mean(data$Ozone)+sd(data$Ozone))
 
 #########################################################################
 data <- read.csv("data/diamonds.csv")
-# head(data)
-# summary(data)
-# describe(data)
-# dim(data)
-# str(data)
 data <- data[order(-data$price),]
 dim(data)
 data <- data[1:200,]
@@ -274,15 +261,10 @@ print(max(no_na))
 summary(data)
 
 #########################################################################
-# library(psych)
-# describe(state.x77$Income)
-# head(state.x77)
-# str(state.x77)
 minmax <- function (x){
     return ((x - min(x))/(max(x)-min(x)))
 }
 data <- data.frame(state.x77)
-# data
 result <- minmax(data$Income)
 head(result)
 print(sum(result > 0.5))
@@ -298,10 +280,7 @@ print(sum(result > 0))
 precip
 data <- data.frame(names(precip))
 data$precip <- precip
-# head(data)
 names(data) <- c("US city","precip")
-# head(data)
-# dim(data)
 summary(data)
 q25 <- quantile(data$precip,0.25)
 q25
@@ -317,8 +296,6 @@ boxplot(data$precip)
 
 #########################################################################
 data <- read.csv("data/housing.csv", header=T, fileEncoding="EUC-KR")
-# data
-# summary(data)
 median_value <- median(data$total_bedrooms, na.rm = T)
 median_value
 data$total_bedrooms <- ifelse(is.na(data$total_bedrooms),median_value,data$total_bedrooms)
@@ -401,18 +378,15 @@ low <- mean_v - 1.5 * sd_v
 low
 
 outlier <- data$bmi >= upper | data$bmi <= low
-# outlier
+outlier
 
 result <- data$bmi[outlier]
-# result
+result
+
 print(mean(result))
-# boxplot(data$bmi)
 
 #########################################################################
 data <- read.csv("data/country.csv", header=T)
-dim(data)
-# summary(data)
-# str(data)
 data_naomit <- na.omit(data)
 data_naomit
 
@@ -529,7 +503,6 @@ id <- sample(1:nrow(data), as.integer(0.7*nrow(data)))
 train <- data[id,]
 test <- data[-id,]
 
-
 bag <- bagging(Class ~., train, mfinal=10)
 plot(bag$trees[[10]])
 text(bag$trees[[10]])
@@ -545,7 +518,6 @@ str(new)
 confusionMatrix(new$predict, new$actual)
 roc(new$actual, as.integer(new$predict))$auc
 
-
 bst <- boosting(Class ~., train, boos=TRUE, mfinal=100)
 plot(bst$trees[[10]])
 text(bst$trees[[10]])
@@ -556,14 +528,12 @@ new$predict <- as.factor((new$predict)$class)
 confusionMatrix(new$predict, new$actual)
 roc(new$actual, as.integer(new$predict))$auc
 
-
 adabst <- ada(Class ~., train, iter=20 , nu=1 ,type="distance")
 new <- data.frame(actual = test$Class)
 new$predict <- predict(adabst, test)
 
 confusionMatrix(new$predict, new$actual)
 roc(new$actual, as.integer(new$predict))$auc
-
 
 data <- read.csv("data/Ionosphere.csv",header=T)
 data <- data.frame(data)
@@ -583,7 +553,6 @@ plot(margin(rfmodel))
 
 new <- data.frame(actual = test$Class)
 new$predict <- predict(rfmodel,test)
-
 #new$actual <- as.factor(new$actual)
 #new$predict <- as.factor(new$predict)
 
@@ -599,7 +568,6 @@ new$predict <- predict(model,test)
 confusionMatrix(new$predict, new$actual)
 roc(new$actual, as.integer(new$predict))$auc
 
-
 model <- cforest(Class ~., train)
 predict <- predict(model, newdata= test, OOB=TRUE, type="responser")
 new <- data.frame(actual = test$Class)
@@ -608,19 +576,12 @@ confusionMatrix(new$predict, new$actual)
 roc(new$actual, as.integer(new$predict))$auc
 plot(predict)
 
-
 #setwd("result")
 #write.csv(new, "980415;csv")
 #result <- read.csv("980415.csv", header=T, fileEncoding = "EUC-KR")
 #View(result)
 
 #########################################################################
-#class(state.x77)
-#data <- data.frame(state.x77)
-#head(data)
-#summary(data)
-#describe(data)
-
 data <- data.frame(state.x77)
 
 model <- lm(Population ~ Income+Illiteracy+Life.Exp+Murder+HS.Grad+Frost, data)
@@ -707,8 +668,6 @@ data <- read.csv("data/train_commerce.csv", header=T)
 data <- na.omit(data)
 data <- data[,-1]
 summary(data)
-#head(data)
-#dim(data
 
 data$Reached.on.Time_Y.N <- as.factor(data$Reached.on.Time_Y.N)
 str(data)
@@ -720,7 +679,6 @@ test <- data[-id, ]
 model <- tree(Reached.on.Time_Y.N - Customer_care_calls+Customer_rating+Cost_of_the_Product+Prior_purchases+Weight_in_gms,train)
 
 summary(model)
-
 names(model)
 nrow(train)
 nrow(test)
@@ -762,66 +720,44 @@ confusionMatrix(new$predict, new$actual)
 #
 #########################################################################
 data <- read.csv("data/data.csv", header=T, fileEncoding="EUC-KR")
-# data
 data1 <- subset(data, data$성별 == "남자")
 data2 <- subset(data, data$성별 == "여자")
-# describe(data1$쇼핑만족도)
-# describe(data2$쇼핑만족도)
 t_result <- t.test(data1$쇼핑만족도,data2$쇼핑만족도)
 t_result
 
 data <- read.csv("data/data.csv", header=T, fileEncoding="EUC-KR")
-# data
 data1 <- subset(data, data$주거지역 == "소도시")
 data2 <- subset(data, data$주거지역 == "중도시")
-# describe(data1$쇼핑액)
-# describe(data2$쇼핑액)
 t_result <- t.test(data1$쇼핑액,data2$쇼핑액)
 t_result
 
 data <- read.csv("data/data.csv", header=T, fileEncoding="EUC-KR")
-# data
 data1 <- subset(data, data$주거지역 == "소도시")
 data2 <- subset(data, data$주거지역 == "대도시")
-# describe(data1$쇼핑액)
-# describe(data2$쇼핑액)
 t_result <- t.test(data1$쇼핑액,data2$쇼핑액)
 t_result
 
 data <- read.csv("data/data.csv", header=T, fileEncoding="EUC-KR")
-# data
 data1 <- subset(data, data$주거지역 == "소도시")
 data2 <- subset(data, data$주거지역 == "대도시")
-# describe(data1$쇼핑액)
-# describe(data2$쇼핑액)
 t_result <- t.test(data1$쇼핑액,data2$쇼핑액)
 t_result
 
-
 data <- read.csv("data/data.csv", header=T, fileEncoding="EUC-KR")
-# data
 data <- subset(data, select=c(고객번호, 쇼핑1월, 쇼핑3월))
-# describe(data1$쇼핑1월)
-# describe(data2$쇼핑3월)
 t_result <- t.test(data$쇼핑1월,data$쇼핑3월,paired=TRUE)
 t_result
 
 data <- read.csv("data/data.csv", header=T, fileEncoding="EUC-KR")
-# data
 data <- subset(data, select=c(고객번호, 쇼핑2월, 쇼핑3월))
-# describe(data1$쇼핑2월)
-# describe(data2$쇼핑3월)
 t_result <- t.test(data$쇼핑2월,data$쇼핑3월,paired=TRUE)
 t_result
 
 #########################################################################
-# str(iris)
 setosa_data <- subset(iris,Species == 'setosa')
-# head(setosa_data)
 versicolor <-  subset(iris,Species == 'versicolor')
-# head(versicolor)
 virginica <-  subset(iris,Species == 'virginica')
-# head(virginica)
+
 t.test(setosa_data$Petal.Length,versicolor$Petal.Length)
 
 t.test(setosa_data$Petal.Length,virginica$Petal.Length)
@@ -831,7 +767,6 @@ t.test(setosa_data$Petal.Length,setosa_data$Sepal.Length, paired=TRUE)
 t.test(setosa_data$Petal.Width,setosa_data$Sepal.Width, paired=TRUE)
 
 #########################################################################
-#mtcars
 data1 <- subset(mtcars, mtcars$vs == 0)
 data2 <- subset(mtcars, mtcars$vs == 1)
 t_result <- t.test(data1$mpg, data2$mpg)
@@ -852,8 +787,6 @@ t_result
 
 #########################################################################
 data <- read.csv("data/data.csv", header=T, fileEncoding="EUC-KR")
-# data1 <- subset(data, data$주거지역 == "소도시")
-# data2 <- subset(data, data$주거지역 == "중도시")
 n1 <- length(which(data$주거지역 == "소도시"))
 n1
 n2 <- length(which(data$주거지역 == "중도시"))
@@ -871,8 +804,6 @@ prop_result <- prop.test(x,n)
 prop_result
 
 data <- read.csv("data/data.csv", header=T, fileEncoding="EUC-KR")
-# data1 <- subset(data, data$주거지역 == "소도시")
-# data2 <- subset(data, data$주거지역 == "대도시")
 n1 <- length(which(data$주거지역 == "소도시"))
 n1
 n2 <- length(which(data$주거지역 == "대도시"))
@@ -890,8 +821,6 @@ prop_result <- prop.test(x,n)
 prop_result
 
 #########################################################################
-Titanic
-str(Titanic)
 x <- data.frame(Titanic)
 n1 <- length(which(x$Sex == "Male"))
 n1
@@ -909,7 +838,6 @@ x
 
 props_result <- prop.test(x,n)
 props_result
-
 
 x <- data.frame(Titanic)
 n1 <- length(which(x$Class == "1st"))
@@ -949,7 +877,6 @@ aov_result <- aov(쇼핑만족도 ~ 주거지역 , data)
 aov_result
 summary(aov_result)
 
-
 data <- read.csv("data/data.csv", header=T, fileEncoding="EUC-KR")
 aov_data <- as.data.frame(rbind(cbind(data$이용만족도, 1), cbind(data$쇼핑만족도,2)))
 
@@ -959,7 +886,6 @@ head(aov_data)
 aov_result <- aov(만족도~구분, aov_data)
 aov_result
 summary(aov_result)
-
 
 data <- read.csv("data/data.csv", header=T, fileEncoding="EUC-KR")
 aov_data <- as.data.frame(rbind(cbind(data$품질, 1), cbind(data$가격,2), cbind(data$서비스,3), cbind(data$배송,4)))
