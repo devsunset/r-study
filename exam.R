@@ -761,8 +761,74 @@ confusionMatrix(new$predict, new$actual)
 #   STUDY TYPE 3
 #
 #########################################################################
+data <- read.csv("data/data.csv", header=T, fileEncoding="EUC-KR")
+# data
+data1 <- subset(data, data$성별 == "남자")
+data2 <- subset(data, data$성별 == "여자")
+# describe(data1$쇼핑만족도)
+# describe(data2$쇼핑만족도)
+t_result <- t.test(data1$쇼핑만족도,data2$쇼핑만족도)
+t_result
+
+data <- read.csv("data/data.csv", header=T, fileEncoding="EUC-KR")
+# data
+data1 <- subset(data, data$주거지역 == "소도시")
+data2 <- subset(data, data$주거지역 == "중도시")
+# describe(data1$쇼핑액)
+# describe(data2$쇼핑액)
+t_result <- t.test(data1$쇼핑액,data2$쇼핑액)
+t_result
+
+data <- read.csv("data/data.csv", header=T, fileEncoding="EUC-KR")
+# data
+data1 <- subset(data, data$주거지역 == "소도시")
+data2 <- subset(data, data$주거지역 == "대도시")
+# describe(data1$쇼핑액)
+# describe(data2$쇼핑액)
+t_result <- t.test(data1$쇼핑액,data2$쇼핑액)
+t_result
+
+data <- read.csv("data/data.csv", header=T, fileEncoding="EUC-KR")
+# data
+data1 <- subset(data, data$주거지역 == "소도시")
+data2 <- subset(data, data$주거지역 == "대도시")
+# describe(data1$쇼핑액)
+# describe(data2$쇼핑액)
+t_result <- t.test(data1$쇼핑액,data2$쇼핑액)
+t_result
+
+
+data <- read.csv("data/data.csv", header=T, fileEncoding="EUC-KR")
+# data
+data <- subset(data, select=c(고객번호, 쇼핑1월, 쇼핑3월))
+# describe(data1$쇼핑1월)
+# describe(data2$쇼핑3월)
+t_result <- t.test(data$쇼핑1월,data$쇼핑3월,paired=TRUE)
+t_result
+
+data <- read.csv("data/data.csv", header=T, fileEncoding="EUC-KR")
+# data
+data <- subset(data, select=c(고객번호, 쇼핑2월, 쇼핑3월))
+# describe(data1$쇼핑2월)
+# describe(data2$쇼핑3월)
+t_result <- t.test(data$쇼핑2월,data$쇼핑3월,paired=TRUE)
+t_result
 
 #########################################################################
+# str(iris)
+setosa_data <- subset(iris,Species == 'setosa')
+# head(setosa_data)
+versicolor <-  subset(iris,Species == 'versicolor')
+# head(versicolor)
+virginica <-  subset(iris,Species == 'virginica')
+# head(virginica)
+t.test(setosa_data$Petal.Length,versicolor$Petal.Length)
+
+t.test(setosa_data$Petal.Length,virginica$Petal.Length)
+
+t.test(setosa_data$Petal.Length,setosa_data$Sepal.Length, paired=TRUE)
+
+t.test(setosa_data$Petal.Width,setosa_data$Sepal.Width, paired=TRUE)
 
 #########################################################################
 
