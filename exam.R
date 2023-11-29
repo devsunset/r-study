@@ -890,6 +890,44 @@ prop_result <- prop.test(x,n)
 prop_result
 
 #########################################################################
+Titanic
+str(Titanic)
+x <- data.frame(Titanic)
+n1 <- length(which(x$Sex == "Male"))
+n1
+n2 <- length(which(x$Sex == "Female"))
+n2
+n <- c(n1,n2)
+n
+
+x1 <- length(which(x$Sex == "Male" & x$Survived == "Yes"))
+x1
+x2 <- length(which(x$Sex == "Female" & x$Survived == "Yes"))
+x2
+x <- c(x1, x2)
+x
+
+props_result <- prop.test(x,n)
+props_result
+
+
+x <- data.frame(Titanic)
+n1 <- length(which(x$Class == "1st"))
+n1
+n2 <- length(which(x$Class == "2nd"))
+n2
+n <- c(n1,n2)
+n
+
+x1 <- length(which(x$Class == "1st" & x$Survived == "Yes"))
+x1
+x2 <- length(which(x$Class == "2nd" & x$Survived == "Yes"))
+x2
+x <- c(x1, x2)
+x
+
+props_result <- prop.test(x,n)
+props_result
 
 #########################################################################
 
