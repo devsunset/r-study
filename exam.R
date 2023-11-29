@@ -831,8 +831,63 @@ t.test(setosa_data$Petal.Length,setosa_data$Sepal.Length, paired=TRUE)
 t.test(setosa_data$Petal.Width,setosa_data$Sepal.Width, paired=TRUE)
 
 #########################################################################
+#mtcars
+data1 <- subset(mtcars, mtcars$vs == 0)
+data2 <- subset(mtcars, mtcars$vs == 1)
+t_result <- t.test(data1$mpg, data2$mpg)
+t_result
+
+data1 <- subset(mtcars, mtcars$am == 0)
+data2 <- subset(mtcars, mtcars$am == 1)
+t_result <- t.test(data1$mpg, data2$mpg)
+t_result
+
+data <- mtcars
+data$id <- as.integer(as.factor(rownames(data)))
+t_result <- t.test(data$id, data$wt)
+t_result
+
+t_result <- t.test(data$id, data$hp)
+t_result
 
 #########################################################################
+data <- read.csv("data/data.csv", header=T, fileEncoding="EUC-KR")
+# data1 <- subset(data, data$주거지역 == "소도시")
+# data2 <- subset(data, data$주거지역 == "중도시")
+n1 <- length(which(data$주거지역 == "소도시"))
+n1
+n2 <- length(which(data$주거지역 == "중도시"))
+n2
+n <- c(n1, n2)
+n
+x1 <- length(which(data$주거지역 == "소도시" & data$쿠폰선호도 == "예"))
+x1
+x2 <- length(which(data$주거지역 == "중도시" & data$쿠폰선호도 == "예"))
+x2
+x <- c(x1,x2)
+x
+
+prop_result <- prop.test(x,n)
+prop_result
+
+data <- read.csv("data/data.csv", header=T, fileEncoding="EUC-KR")
+# data1 <- subset(data, data$주거지역 == "소도시")
+# data2 <- subset(data, data$주거지역 == "대도시")
+n1 <- length(which(data$주거지역 == "소도시"))
+n1
+n2 <- length(which(data$주거지역 == "대도시"))
+n2
+n <- c(n1, n2)
+n
+x1 <- length(which(data$주거지역 == "소도시" & data$쿠폰선호도 == "예"))
+x1
+x2 <- length(which(data$주거지역 == "대도시" & data$쿠폰선호도 == "예"))
+x2
+x <- c(x1,x2)
+x
+
+prop_result <- prop.test(x,n)
+prop_result
 
 #########################################################################
 
