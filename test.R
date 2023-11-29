@@ -183,9 +183,47 @@ print(f %>% f %>% filter(gap == max(as.numeric(result))))
 #   TEST TYPE 3
 #
 #########################################################################
+data <- read.csv("data/height.csv",header=T)
+head(data)
+describe(data)
+mean(data$h_after-data$h_before)
+round(mean(data$h_after-data$h_before),2)
 
+t_result <- t.test(data$h_after , data$h_before, alternative="greater", paired=TRUE)
+t_result
+
+summar(t_result)
+print(t_result$statistic)
+round(t_result$statistic,2)
+print(t_result$p.value)
+round(t_result$p.value,4)
+
+if (t_result$p.value < 0.05){
+    print("Reject of Null Hypothesis")
+}else{
+    print("Accept of Null Hypothesis")
+}
 
 #########################################################################
+data <- read.csv("data/record.csv",header=T)
+head(data)
+describe(data)
+mean(data$r_after-data$r_before)
+round(mean(data$r_after-data$r_before),2)
 
+t_result <- t.test(data$h_after , data$h_before, alternative="greater", paired=TRUE)
+t_result
+
+summar(t_result)
+print(t_result$statistic)
+round(t_result$statistic,2)
+print(t_result$p.value)
+round(t_result$p.value,4)
+
+if (t_result$p.value < 0.05){
+    print("Reject of Null Hypothesis")
+}else{
+    print("Accept of Null Hypothesis")
+}
 
 #########################################################################
