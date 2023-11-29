@@ -54,6 +54,27 @@ print(outlier)
 # print(boxplot(outlier))
 
 #########################################################################
+# print(iris)
+print(dim(iris))
+data <- subset(iris, Species == 'setosa')
+print(dim(data))
+
+data <- data[order(-data$Sepal.Width),]
+# print(data)
+print(data$Sepal.Width[1:10])
+print(data$Sepal.Width[10])
+
+data$Sepal.Width[1:10] <- data$Sepal.Width[10]
+print(data$Sepal.Width[1:10])
+
+data_p <- data[data$Petal.Length >= 1.5,]
+print(data_p)
+
+result <- mean(data_p$Sepal.Width)
+print(result)
+
+check <- iris[iris$Petal.Width >= 1.5,]
+print(mean(check$Sepal.Width))
 
 #########################################################################
 
