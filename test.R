@@ -5,25 +5,6 @@
 #########################################################################
 df = read.csv("data/mtcars.csv")
 
-# 사용자 코딩
-print(str(df))
-
-# qsec
-minmax <- function(x){
-	return ((x - min(x))/(max(x) - min(x)))
-}
-
-df$qsec <- minmax(df$qsec)
-print(sum(ifelse(df$qsec > 0.5, 1,0)))
-
-
-
-df = read.csv("data/mtcars.csv")
-
-# 사용자 코딩
-print(str(df))
-
-# qsec
 minmax <- function(x){
 	return ((x - min(x))/(max(x) - min(x)))
 }
@@ -36,12 +17,6 @@ print(sum(result > 0.5))
 #########################################################################
 df = read.csv("data/mtcars.csv")
 
-# 사용자 코딩
-print(str(df))
-
-# help(quantile)
-# print(quantile(df$wt,0.25))
-# print(quantile(df$wt,0.75))
 q25 <- quantile(df$wt,0.25)
 q75 <- quantile(df$wt,0.75)
 iqr <- q75 - q25
@@ -54,13 +29,11 @@ print(outlier)
 # print(boxplot(outlier))
 
 #########################################################################
-# print(iris)
 print(dim(iris))
 data <- subset(iris, Species == 'setosa')
 print(dim(data))
 
 data <- data[order(-data$Sepal.Width),]
-# print(data)
 print(data$Sepal.Width[1:10])
 print(data$Sepal.Width[10])
 
@@ -81,10 +54,40 @@ print(mean(check$Sepal.Width))
 #   TEST TYPE 2
 #
 #########################################################################
+library(e1071)
+library(caret)
+library(pROC)
 
-#########################################################################
+id <- sample(1:nrow(iris), as.integer(0.7*nrow(iris)))
+train <- iris[id,]
+test <- iris[-id,]
 
-#########################################################################
+cost_range <- c(0.1, 1, 10, 100)
+gamma_range <- c(0.1,0.5, 1, 2)
+svm_tune <- tune(svm, train.x = Species ~., data=train, kernel="radial", ranges=list(cost=cost_range, gamma=gamma_range))
+svm_tune
+
+model <- svm(Species ~., train, type="C-classification",kernel="radial",cost=100, gamma=0.1)
+
+new <- data.frame(actual = test$Species)
+new$predict <- predict(model, test, decision.value = TRUE)
+
+cross_table <- table(new$predict, new$actual)
+names(dimnames(cross_table)) <- c("Predicated", "Actual")
+cross_table
+
+accuracy <- sum(diag(cross_table)) / sum(cross_table) * 100
+accuracy
+
+error <- 100 -accuracy
+error
+
+confusionMatrix(cross_table)
+plot.roc(new$actual, as.integer(new$predict), legacy.axes=TRUE)
+
+result_validation <- roc(new$actual, as.integer(new$predict))
+names(result_validation)
+result_validation$auc
 
 #########################################################################
 #
@@ -173,52 +176,44 @@ print(f %>% f %>% filter(gap == max(as.numeric(result))))
 #   TEST TYPE 2
 #
 #########################################################################
-#head(iris)
-#summary(iris)
-library(e1071)
-library(caret)
-library(pROC)
+data <- read.csv("data/train_commerce.csv", header=T)
 
-id <- sample(1:nrow(iris), as.integer(0.7*nrow(iris)))
-train <- iris[id,]
-test <- iris[-id,]
+id <- sample(1:nrow(data), as.integer(0.7*nrow(data)))
+train <- data[id,]
+test <- data[-id,]
 
-# dim(train)
-# dim(test)
-# head(train)
-# head(test)
+train <- train[,-1]
+test <- test[,-1]
 
-cost_range <- c(0.1, 1, 10, 100)
-gamma_range <- c(0.1,0.5, 1, 2)
-svm_tune <- tune(svm, train.x = Species ~., data=train, kernel="radial", ranges=list(cost=cost_range, gamma=gamma_range))
-svm_tune
+train$Reached.on.Time_Y.N <- as.factor(train$Reached.on.Time_Y.N)
+test$Reached.on.Time_Y.N <- as.factor(test$Reached.on.Time_Y.N)
 
-model <- svm(Species ~., train, type="C-classification",kernel="radial",cost=100, gamma=0.1)
+model <- randomForest(Reched.on.Time_Y.N ~.. data=train, ntree=100, proximity=TRUE)
 
-new <- data.frame(actual = test$Species)
-new$predict <- predict(model, test, decision.value = TRUE)
+new <- data.frame(actual=test$Reached.on.Time_Y.N)
+new$predict <- predict(model, test, decision.values = TRUE)
 
 cross_table <- table(new$predict, new$actual)
-names(dimnames(cross_table)) <- c("Predicated", "Actual")
+names(dimnames(cross_table)) <- c("Predict","Actual")
 cross_table
 
-accuracy <- sum(diag(cross_table)) / sum(cross_table) * 100
+accuracy <- sum(diag(cross_table))/sum(cross_table) * 100
 accuracy
 
-error <- 100 -accuracy
-error
+error <- 100 - accuracy
 
 confusionMatrix(cross_table)
 plot.roc(new$actual, as.integer(new$predict), legacy.axes=TRUE)
 
 result_validation <- roc(new$actual, as.integer(new$predict))
 names(result_validation)
+
 result_validation$auc
 
-#########################################################################
-
-#########################################################################
-
+#setwd("path")
+#write.csv(new,"result.csv")
+#data <- read.csv("result.csv", header=T, fileEncoding="EUC-KR")
+#View(data)
 #########################################################################
 #
 #   TEST TYPE 3
