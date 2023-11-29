@@ -77,7 +77,9 @@ check <- iris[iris$Petal.Width >= 1.5,]
 print(mean(check$Sepal.Width))
 
 #########################################################################
-
+#
+#   TEST TYPE 2
+#
 #########################################################################
 
 #########################################################################
@@ -85,7 +87,91 @@ print(mean(check$Sepal.Width))
 #########################################################################
 
 #########################################################################
+#
+#   TEST TYPE 3
+#
+#########################################################################
+data <- read.csv("data/blood_pressure.csv",header=T)
+head(data)
+describe(data)
+mean(data$bp_after-data$bp_before)
+round(mean(data$bp_after-data$bp_before),2)
 
+t_result <- t.test(data$bp_after , data$bp_before, alternative="less", paired=TRUE)
+t_result
+
+summar(t_result)
+print(t_result$statistic)
+round(t_result$statistic,2)
+print(t_result$p.value)
+round(t_result$p.value,4)
+
+if (t_result$p.value < 0.05){
+    print("Reject of Null Hypothesis")
+}else{
+    print("Accept of Null Hypothesis")
+}
+
+#########################################################################
+data <- read.csv("data/cholesterol.csv",header=T)
+head(data)
+describe(data)
+mean(data$ch_after-data$ch_before)
+round(mean(data$ch_after-data$ch_before),2)
+
+t_result <- t.test(data$ch_after , data$ch_before, alternative="less", paired=TRUE)
+t_result
+
+summar(t_result)
+print(t_result$statistic)
+round(t_result$statistic,2)
+print(t_result$p.value)
+round(t_result$p.value,4)
+
+if (t_result$p.value < 0.05){
+    print("Reject of Null Hypothesis")
+}else{
+    print("Accept of Null Hypothesis")
+}
+
+#########################################################################
+#
+#   TEST TYPE 1
+#
+#########################################################################
+# airquality
+str(airquality)
+dim(airquality)
+q6 <- quantile(na.omit(airquality)[,1],0.4)
+print(q6)
+
+#########################################################################
+data <- na.omit(airquality)
+str(data)
+
+data_ana <- subset(data, Month==5)
+data_ana
+
+m <- mean(data_ana$Ozone)
+m 
+dim(data_ana)
+sum(data_ana$Ozone > m)
+print(sum(data_ana$Ozone > m))
+
+#########################################################################
+result <- lapply(airquality[,1:6], function(x) {sum(is.na(x))})
+result
+
+f <- data.frame(var=colnames(airquality)[1:6],gap=as.numeric(result))
+f
+
+f %>% filter(gap == max(as.numeric(result)))
+print(f %>% f %>% filter(gap == max(as.numeric(result))))
+
+#########################################################################
+#
+#   TEST TYPE 2
+#
 #########################################################################
 
 #########################################################################
@@ -93,7 +179,13 @@ print(mean(check$Sepal.Width))
 #########################################################################
 
 #########################################################################
+#
+#   TEST TYPE 3
+#
+#########################################################################
+
 
 #########################################################################
+
 
 #########################################################################
