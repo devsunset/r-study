@@ -175,7 +175,8 @@ test <- test[,-1]
 train$Reached.on.Time_Y.N <- as.factor(train$Reached.on.Time_Y.N)
 test$Reached.on.Time_Y.N <- as.factor(test$Reached.on.Time_Y.N)
 
-model <- randomForest(Reched.on.Time_Y.N ~.. data=train, ntree=100, proximity=TRUE)
+library(randomForest) 
+model <- randomForest(Reched.on.Time_Y.N ~., data=train, ntree=100, proximity=TRUE)
 
 new <- data.frame(actual=test$Reached.on.Time_Y.N)
 new$predict <- predict(model, test, decision.values = TRUE)
