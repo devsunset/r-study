@@ -173,6 +173,47 @@ print(f %>% f %>% filter(gap == max(as.numeric(result))))
 #   TEST TYPE 2
 #
 #########################################################################
+#head(iris)
+#summary(iris)
+library(e1071)
+library(caret)
+library(pROC)
+
+id <- sample(1:nrow(iris), as.integer(0.7*nrow(iris)))
+train <- iris[id,]
+test <- iris[-id,]
+
+# dim(train)
+# dim(test)
+# head(train)
+# head(test)
+
+cost_range <- c(0.1, 1, 10, 100)
+gamma_range <- c(0.1,0.5, 1, 2)
+svm_tune <- tune(svm, train.x = Species ~., data=train, kernel="radial", ranges=list(cost=cost_range, gamma=gamma_range))
+svm_tune
+
+model <- svm(Species ~., train, type="C-classification",kernel="radial",cost=100, gamma=0.1)
+
+new <- data.frame(actual = test$Species)
+new$predict <- predict(model, test, decision.value = TRUE)
+
+cross_table <- table(new$predict, new$actual)
+names(dimnames(cross_table)) <- c("Predicated", "Actual")
+cross_table
+
+accuracy <- sum(diag(cross_table)) / sum(cross_table) * 100
+accuracy
+
+error <- 100 -accuracy
+error
+
+confusionMatrix(cross_table)
+plot.roc(new$actual, as.integer(new$predict), legacy.axes=TRUE)
+
+result_validation <- roc(new$actual, as.integer(new$predict))
+names(result_validation)
+result_validation$auc
 
 #########################################################################
 
