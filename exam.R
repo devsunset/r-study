@@ -121,9 +121,41 @@ data$ratio <- data$likes/data$view
 print(sum(ifelse(data$category_id == 10 & data$ratio > 0.04 &  data$ratio <0.05 , 1, 0)))
 
 #########################################################################
-data <- read.csv("data/netflix.csv",header=T)
+data <- read.csv("netflix.csv",header=T)
 data$year <- year(data$date_added)
 date$month <- month(date_added)
 date$day <- day(date_added)
 print(sum(ifelse(data$country=='United Kingdom' & data$year ==2021 & ( data$month ==8 | data$month ==8) ,1,0 )))
 
+#########################################################################
+data <- read.csv("garbagebag.csv",header=T)
+data1 <- subset(data, 종량제봉투처리방식 == "소각용" & 종량제봉투사용대상 == "가정용" & X2L가격 !=0)
+price <- mean(data1$X2L가격)
+
+#########################################################################
+data <- read.csv("index.csv", header=T)
+data$bmi <- data$Weight / ((data$Height/100)*(data$Height/100))
+print(abs(sum(data$bmi>=25)-sum(data$bmi <25)))
+print(sum(data$bmi >= 25))
+print(sum(data$bmi < 25))
+
+#########################################################################
+data <- read.csv("student.csv",header=T)
+data1 <- subset(data, (전입학생수합계.명. != is.na(전입학생수합계.명.) | 전출학생수합계.명. !=is.na(전출학생수합계.명.)))
+data1$net <- 전입학생수합계.명. - 전출학생수합계.명.
+data2 <- data1[order(-data1$net),]
+print(data2[1,4])
+print(data2[2,4])
+print(data2[1,27])
+print(data2$net[1])
+print(data2[1,26])
+print(전체학생수합계.명.[1])
+
+#########################################################################
+#
+#   EXAM TYPE 1
+#
+#########################################################################
+
+
+#########################################################################
