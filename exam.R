@@ -116,3 +116,14 @@ print(floor(value))
 print(ceiling(value))
 
 #########################################################################
+data <- read.csv("data/USvideos.csv", header=T)
+data$ratio <- data$likes/data$view 
+print(sum(ifelse(data$category_id == 10 & data$ratio > 0.04 &  data$ratio <0.05 , 1, 0)))
+
+#########################################################################
+data <- read.csv("data/netflix.csv",header=T)
+data$year <- year(data$date_added)
+date$month <- month(date_added)
+date$day <- day(date_added)
+print(sum(ifelse(data$country=='United Kingdom' & data$year ==2021 & ( data$month ==8 | data$month ==8) ,1,0 )))
+
