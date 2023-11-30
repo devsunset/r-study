@@ -194,5 +194,66 @@ confusionMatrix(cross_table)
 # plot.roc(new$actual, as.integer(new$predict), legacy.axes = TRUE)
 roc(new$actual, as.integer(new$predict))$auc
 
+write.csv(new,"xx.csv")
+
+#########################################################################
+id <- sample(1:nrow(iris), as.integer(nrow(iris)*0.7))
+train <- iris[id,]
+test <- iris[-id,]
+
+library(rpart)
+tree <- rpart(Species ~., data = train)
+# rpart.plot(tree)
+
+new_tree <- data.frame(actual=test$Species)
+new_tree$predict <- predict(tree, test, type="class")
+
+cross_table_tree <- table(new_tree$predict, new_tree$actual)
+names(dimnames(cross_table_tree)) <- c("Predict","Actual")
+cross_table_tree
+
+accuracy_tree <- sum(diag(cross_table_tree))/sum(cross_table_tree) * 100
+accuracy_tree
+
+error <- 100 - accuracy_tree
+error
+
+library(cacrt)
+confunsionMatrix(cross_table_tree)
+
+library(pROC)
+plot.roc(new_tree$actual, as.integer(new_tree$predict), leagacy.axes = TRUE)
+result_validation_tree <-  roc(new_tree$actual, as.integer(new_tree$predict))
+names(result_validation_tree)
+result_validation_tree$auc
+
+### 
+library(e1071)
+svm <- svm(Species ~., train, type="C-classification")
+new_svm <- data.frame(actual = test$Species)
+
+cross_table_svm <- table(new_svm$predict, new_svm$actual)
+names(dimnames(cross_table_svm)) <- c("Predict","Actual")
+cross_table_svm
+
+accuracy_svm <- sum(diag(cross_table_svm))/sum(cross_table_svm) * 100
+accuracy_svm
+
+error <- 100 - accuracy_svm
+error
+
+library(cacrt)
+confunsionMatrix(cross_table_svm)
+
+library(pROC)
+plot.roc(new_svm$actual, as.integer(new_svm$predict), leagacy.axes = TRUE)
+result_validation_svm <-  roc(new_svm$actual, as.integer(new_svm$predict))
+names(result_validation_svm)
+result_validation_svm$auc
+
+# setwd("")
+write.csv(new_svm,"result.csv")
+data <- read.csv("result.csv", header=T)
+View(data)
 
 #########################################################################
