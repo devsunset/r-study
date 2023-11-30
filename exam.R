@@ -194,7 +194,7 @@ confusionMatrix(cross_table)
 # plot.roc(new$actual, as.integer(new$predict), legacy.axes = TRUE)
 roc(new$actual, as.integer(new$predict))$auc
 
-write.csv(new,"xx.csv")
+# write.csv(new,"result.csv")
 
 #########################################################################
 id <- sample(1:nrow(iris), as.integer(nrow(iris)*0.7))
@@ -231,6 +231,7 @@ result_validation_tree$auc
 library(e1071)
 svm <- svm(Species ~., train, type="C-classification")
 new_svm <- data.frame(actual = test$Species)
+new_svm$predict <- predict(svm, test, decision.values=TRUE)
 
 cross_table_svm <- table(new_svm$predict, new_svm$actual)
 names(dimnames(cross_table_svm)) <- c("Predict","Actual")
@@ -251,9 +252,53 @@ result_validation_svm <-  roc(new_svm$actual, as.integer(new_svm$predict))
 names(result_validation_svm)
 result_validation_svm$auc
 
-# setwd("")
-write.csv(new_svm,"result.csv")
-data <- read.csv("result.csv", header=T)
-View(data)
+# write.csv(new_svm,"result.csv")
+# data <- read.csv("result.csv", header=T)
+# View(data)
 
 #########################################################################
+data <- read.csv("data/insurance.csv", header=T)
+data$sex <- as.factor(data$sex)
+
+id <- sample(1:nrow(data), as.integer(nrow(data)*0.7))
+train <- data[id,]
+test <- data[-id,]
+
+library(randomForest)
+rfmodel <- randomForest(sex ~., train, ntree=100, proximity=TRUE) 
+
+new <- data.frame(actual=test$sex)
+new$predict <- predict(rfmodel, test)
+
+result <- F1_Score(new$predict, new$actual)
+result
+
+
+trainmodel <- train(sex ~., train, method="rf", trControl=trainControl(method="cv",number=5), prox=TRUE, allowParallel=TRUE)
+new <- data.frame(actual= test$sex)
+new$predict <- predict(trainmodel, test)
+
+result <- F1_Score(new$predict, new$actual)
+result
+
+#########################################################################
+data <- read.csv("data/insurance.csv", header=T)
+data$sex <- as.factor(data$sex)
+data$smoker <- as.factor(data$smoker)
+data$region <- as.factor(data$region)
+
+id <- sample(1:nrow(data), as.integer(nrow(data)*0.7))
+train <- data[id,]
+test <- data[-id,]
+
+new <- data.frame(actual=test$sex)
+library(party)
+forestmodel <- cforest(Sex~., train)
+predict <- predict(forestmodel,newdata=test, OOB=TRUE, type="response")
+new$predict <- predict
+result <- F1_Score(new$predict, new$actual)
+result_validation_tree
+
+# write.csv(new, "result.csv")
+# result_cforest <- read.csv("result.csv", header=T)
+# View(result_cforest)
