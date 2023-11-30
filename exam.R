@@ -156,6 +156,43 @@ print(전체학생수합계.명.[1])
 #   EXAM TYPE 2
 #
 #########################################################################
+library(e1071)
+library(caret)
+library(pROC)
+
+#1
+data <- read.csv("data/train_commerce.csv", header=T)
+id <- sample(1:nrow(data), as.integer(nrow(data)*0.7))
+train <- data[id,]
+test <- data[-id,]
+train <- train[,-1]
+test <- test[,-1]
+train$Reached.on.Time_Y.N <- as.factor(train$Reached.on.Time_Y.N)
+test$Reached.on.Time_Y.N <- as.factor(test$Reached.on.Time_Y.N)
+
+#2
+model <- svm(Reached.on.Time_Y.N ~., train, type="C-classification", kernel="radial", cost=10, gamma=0.1)
+
+#3
+new <- data.frame(actual = test$Reached.on.Time_Y.N)
+new$predict <- predict(model, test, decision.values=TRUE)
+
+#4
+cross_table <- table(new$predict, new$actual)
+names(dimnames(cross_table)) <- c("Predicted", "Actual")
+cross_table
+
+accuracy <- sum(diag(cross_table)) / sum(cross_table) * 100
+accuracy
+
+error <- 100 - accuracy
+error 
+
+#5
+confusionMatrix(cross_table)
+
+# plot.roc(new$actual, as.integer(new$predict), legacy.axes = TRUE)
+roc(new$actual, as.integer(new$predict))$auc
 
 
 #########################################################################
