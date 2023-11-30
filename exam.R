@@ -4,14 +4,11 @@
 #
 #########################################################################
 data <- read.csv("data/Boston.csv",header=T)
-print(data$crim[1:10])
 data <- data[order(-data$crim),]
-print(data$crim[1:10])
-
 data$crim[1:10] <- data$crim[10]
 print(data$crim[1:10])
+
 data_age80 <- data[data$age >= 80,]
-dim(data_age80)
 result <- mean(data_age80$crim)
 print(result)
 
@@ -22,17 +19,13 @@ print(check_mean)
 
 #########################################################################
 data <- read.csv("data/housing.csv",header=T)
-head(data)
 dim(data)
-str(data)
-summary(data)
 
 n <- nrow(data) * 0.8
 n
 
 data1 <- data[c(1:n),]
 dim(data1)
-summary(data1)
 
 sd_data1 <- sd(data1$total_bedrooms, na.rm = T)
 print(sd_data1)
@@ -47,5 +40,79 @@ sd_data1 <- sd(data1$total_bedrooms)
 print(sd_data1)
 
 #########################################################################
+data <- read.csv("data/insurance.csv", header=T)
+m <- mean(data$charges)
+print(m)
+n <- sd(data$charges)
+print(n)
 
+# print(sum(data$charges[data$charges >= mean(data$charges)+1.5*sd(data$charges)]))
 
+outlier <- m +1.5 * n
+outlier
+
+result <- data$charges >= outlier
+head(result)
+
+print(sum(data$charges[result]))
+print(sum(data$charges))
+print(boxplot(data$charges))
+
+#########################################################################
+data <- read.csv("data/country.csv", header=T)
+q7 <- quantile(na.omit(data)$Guam,0.3) 
+# q7 <- quantile(na.omit(data)[,3],0.3) 
+print(q7)
+
+#########################################################################
+data <- read.csv("data/country.csv", header=T)
+data_naomit <- na.omit(data)
+# print(sum(data_naomit[6,2:8])/(length(data)-1))
+# m <- sum(data_naomit[6,2:8])/(length(data)-1)
+# m
+
+# n <- 0
+# for(i in 2:length(data_naomit)){
+#     if(data_naomit[6,i]> m){
+#         n <- n +1
+#     }
+# }
+# print(n)
+
+m <- apply(data_naomit[6,c(2:8)], 1, mean)
+m
+
+n <- 0
+for (i in 2:length(data_naomit)){
+    if(data_naomit[6,i] > m){
+        n <- n+1
+    }
+}
+print(n)
+
+#########################################################################
+data <- read.csv("data/country.csv", header=T)
+result <- lapply(data[,2:8], function(x){sum(is.na(x))})
+result
+
+f <- data.frame(country=colnames(data)[2:8], gap=as.numeric(result))
+f
+library(dplyr)
+f %>% filter(gap==max(as.numeric(result)))
+print(f %>% filter(gap==max(as.numeric(result))))
+
+#########################################################################
+q1 <- quantile(women$weight, 0.25)
+q1
+
+q3 <- quantile(women$weight, 0.75)
+q3
+
+value <- abs(q1-q3)
+value
+
+print(trunc(value))
+print(floor(value))
+print(ceiling(value))
+
+#########################################################################
