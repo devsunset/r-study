@@ -372,4 +372,9 @@ result <- data.frame(actual=test$price)
 result$predict <- compute(model, norm_test[-length(norm_test)])$net.result
 accuracy(result$actual, result$predict)
 
+#########################################################################
+#
+#   EXAM TYPE 3
+#
+#########################################################################
 
