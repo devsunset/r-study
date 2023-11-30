@@ -46,4 +46,6 @@ summary(data1)
 sd_data1 <- sd(data1$total_bedrooms)
 print(sd_data1)
 
+#########################################################################
+
 
