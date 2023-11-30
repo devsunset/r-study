@@ -4,6 +4,7 @@
 #
 #########################################################################
 data <- read.csv("data/Boston.csv",header=T)
+### check point
 data <- data[order(-data$crim),]
 data$crim[1:10] <- data$crim[10]
 print(data$crim[1:10])
@@ -19,14 +20,13 @@ print(check_mean)
 
 #########################################################################
 data <- read.csv("data/housing.csv",header=T)
-dim(data)
 
 n <- nrow(data) * 0.8
 n
 
 data1 <- data[c(1:n),]
-dim(data1)
 
+### check point
 sd_data1 <- sd(data1$total_bedrooms, na.rm = T)
 print(sd_data1)
 
@@ -48,11 +48,11 @@ print(n)
 
 # print(sum(data$charges[data$charges >= mean(data$charges)+1.5*sd(data$charges)]))
 
+### check point
 outlier <- m +1.5 * n
 outlier
 
 result <- data$charges >= outlier
-head(result)
 
 print(sum(data$charges[result]))
 print(sum(data$charges))
@@ -60,6 +60,7 @@ print(boxplot(data$charges))
 
 #########################################################################
 data <- read.csv("data/country.csv", header=T)
+### check point
 q7 <- quantile(na.omit(data)$Guam,0.3) 
 # q7 <- quantile(na.omit(data)[,3],0.3) 
 print(q7)
@@ -67,18 +68,8 @@ print(q7)
 #########################################################################
 data <- read.csv("data/country.csv", header=T)
 data_naomit <- na.omit(data)
-# print(sum(data_naomit[6,2:8])/(length(data)-1))
-# m <- sum(data_naomit[6,2:8])/(length(data)-1)
-# m
 
-# n <- 0
-# for(i in 2:length(data_naomit)){
-#     if(data_naomit[6,i]> m){
-#         n <- n +1
-#     }
-# }
-# print(n)
-
+### check point
 m <- apply(data_naomit[6,c(2:8)], 1, mean)
 m
 
@@ -92,6 +83,7 @@ print(n)
 
 #########################################################################
 data <- read.csv("data/country.csv", header=T)
+### check point
 result <- lapply(data[,2:8], function(x){sum(is.na(x))})
 result
 
@@ -102,6 +94,7 @@ f %>% filter(gap==max(as.numeric(result)))
 print(f %>% filter(gap==max(as.numeric(result))))
 
 #########################################################################
+### check point
 q1 <- quantile(women$weight, 0.25)
 q1
 
@@ -169,6 +162,7 @@ print(mean(data$mpg)+sd(data$hp))
 #########################################################################
 a <- read.csv("data/mtcars.csv")
 data <- subset(a, am == 0)
+### check point
 print(boxplot(a))
 q <- quantile(data$mpg)
 print(q)
@@ -193,6 +187,7 @@ maxpl <- max(data$Petal.Length)
 print(maxpl)
 minpl <- min(data$Petal.Length)
 print(minpl)
+### check point
 minmax <- function(x){
 	return ((x-min(x))/(max(x)-min(x)))
 }
@@ -201,6 +196,7 @@ data$Petal.Length <- minmax(data$Petal.Length)
 print(mean(data$Petal.Length))
 
 data <- subset(iris,Species == 'setosa')
+### check point
 zscore <- function (x) {
 	return ((x-mean(x))/sd(x))
 }
@@ -210,7 +206,6 @@ print(mean(data$Petal.Length))
 
 #########################################################################
 data <- subset(iris, Species =='versicolor' | Species =='virginica')
-print(dim(data))
 print(summary(data))
 median_sepal <- median(data$Sepal.Length)
 print(median_sepal)
@@ -273,6 +268,7 @@ print(median_before - median_after)
 #########################################################################
 data <- na.omit(airquality)
 summary(data)
+### check point
 q <- quantile(data$Ozone)
 q
 str(q)
@@ -304,7 +300,7 @@ print(max_v - min_v)
 #########################################################################
 data <- read.csv("data/diamonds.csv")
 data <- subset(data, cut == 'Ideal')
-dim(data)
+### check point
 c1 <- cor(data$x,data$price)
 c1
 c2 <- cor(data$y,data$price)
@@ -363,8 +359,7 @@ print(check_mean)
 
 #########################################################################
 presidents
-str(presidents)
-summary(presidents)
+### check point
 data <- matrix(presidents, ncol=4, byrow=TRUE)
 data <- data.frame(data)
 names(data) <- c("Qtr1","Qtr2","Qtr3","Qtr4")
@@ -396,6 +391,7 @@ print(sum(result > 0))
 precip
 data <- data.frame(names(precip))
 data$precip <- precip
+### check point
 names(data) <- c("US city","precip")
 summary(data)
 q25 <- quantile(data$precip,0.25)
@@ -561,4 +557,4 @@ print(result)
 check <- iris[iris$Petal.Width >= 1.5,]
 print(mean(check$Sepal.Width))
 
-#########################################################################
+######################################################################### 
