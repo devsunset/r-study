@@ -281,7 +281,6 @@ new$predict <- predict(trainmodel, test)
 result <- F1_Score(new$predict, new$actual)
 result
 
-#########################################################################
 data <- read.csv("data/insurance.csv", header=T)
 data$sex <- as.factor(data$sex)
 data$smoker <- as.factor(data$smoker)
@@ -302,3 +301,7 @@ result_validation_tree
 # write.csv(new, "result.csv")
 # result_cforest <- read.csv("result.csv", header=T)
 # View(result_cforest)
+
+f1score <- c(0.5445025,0.6095718,0.5592417)
+macrofl_score <- mean(flscore)
+macrofl_score
