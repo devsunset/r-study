@@ -305,3 +305,71 @@ result_validation_tree
 f1score <- c(0.5445025,0.6095718,0.5592417)
 macrofl_score <- mean(flscore)
 macrofl_score
+
+#########################################################################
+data <- read.csv("data/carprice.csv", header=T)
+
+id <- sample(1:nrow(data), as.integer(nrow(data)*0.75))
+train <- data[id,]
+test <- data[-id,]
+
+regression <- lm(price~year+mileage+tax+mpg+engineSize, train)
+regression_rslt <- data.frame(actual= test$price)
+regression_rslt$predict <- predict(regression,newdata=test)
+accuracy(regression_rslt$actual,regression_rslt$predict)
+
+decisiontree_rpart <- rpart(price~year+mileage+tax+mpg+engineSize, data=train)
+decisiontree_rpart_rslt <- data.frame(actual=test$price)
+decisiontree_rpart_rslt$predict <- predict(decisiontree_rpart, newdata=test, type="vector")
+accuracy(decisiontree_rpart_rslt$actual,decisiontree_rpart_rslt$predict)
+
+decisiontree_tree <- tree(price~year+mileage+tax+mpg+engineSize,data=train)
+decisiontree_tree_rslt <- data.frame(actual=test$price)
+decisiontree_tree_rslt$predict <- predict(decisiontree_tree, newdata=test, type="vector")
+accuracy(decisiontree_tree_rslt$actual,decisiontree_tree_rslt$predict)
+
+rfmodel <- train(price~year+mileage+tax+mpg+engineSize,data=train, method="rf", trControl=trainControl(method="cv",number=2), prox=TRUE, allowParallel=TRUE)
+rfmodel_rslt <- data.frame(actual=test$price)
+rfmodel_rslt$predict <- predict(rfmodel,newdata=test)
+accuracy(rfmodel_rslt$actual,rfmodel_rslt$predict)
+plot(rfmodel)
+
+rfmodel2 <- cforest(price~year+mileage+tax+mpg+engineSize,data=train)
+rfmodel2_rslt <- data.frame(actual=test$price)
+rfmodel2_rslt$predict <- predict(rfmodel2,newdata=test)
+accuracy(rfmodel2_rslt$actual,rfmodel2_rslt$predict)
+
+# write.csv(rfmodel_rslt,"990108.csv")
+# result <- read.csv("990108.csv", header=T)
+# View(result)
+
+rf <- randomForest(price~year+mileage+tax+mpg+engineSize, data=train, ntree=100, proxmity=TRUE)
+rf_rslt <- data.frame(actual=test$price)
+rf_rslt$predict <- predict(rf,newdat=test)
+accuracy(rf_rslt$actual, rf_rslt$predict)
+# plot(rf)
+
+data <- read.csv("carprice.csv", header=T)
+data <- subset(data, select=c(year,mileage,tax,mpg, engineSize,price))
+
+id <- sample(1:nrow(data), as.integer(0.75*nrow(data)))
+train <- data[id,]
+test <- data[-id,]
+
+normalize <- function (x){
+    return ((x-min(x))/(max(x)-min(x)))
+}
+
+norm_train <- as.data.frame(lapply(train,normalize))
+norm_test <- as.data.frame(lapply(test,normalize))
+
+norm_train$price <- train$price
+
+model <- neuralnet(price~year+mileage+tax+mpg+engineSize, norm_train, hidden=c(5,5,5))
+plot(model)
+
+result <- data.frame(actual=test$price)
+result$predict <- compute(model, norm_test[-length(norm_test)])$net.result
+accuracy(result$actual, result$predict)
+
+
