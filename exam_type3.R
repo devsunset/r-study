@@ -3,6 +3,52 @@
 #   EXAM TYPE 3
 #
 #########################################################################
+
+### check point
+t.test(data1$쇼핑만족도,data2$쇼핑만족도)
+
+### check point
+t_result <- t.test(data$쇼핑1월,data$쇼핑3월,paired=TRUE)
+
+### check point
+n1 <- length(which(data$주거지역 == "소도시"))
+n1
+n2 <- length(which(data$주거지역 == "중도시"))
+n2
+n <- c(n1, n2)
+x1 <- length(which(data$주거지역 == "소도시" & data$쿠폰선호도 == "예"))
+x1
+x2 <- length(which(data$주거지역 == "중도시" & data$쿠폰선호도 == "예"))
+x2
+x <- c(x1,x2)
+
+### check point
+prop_result <- prop.test(x,n)
+
+### check point
+aov_result <- aov(이용만족도 ~ 주거지역 , data)
+
+### check point
+aov_data <- as.data.frame(rbind(cbind(data$이용만족도, 1), cbind(data$쇼핑만족도,2)))
+
+### check point
+if (t_result$p.value < 0.05){
+    print("Reject of Null Hypothesis")
+}else{
+    print("Accept of Null Hypothesis")
+}
+
+### check point
+c_result <- chisq.test(df$Sex , df$SurviedText)
+
+### check poing
+logit <- glm(Survived~Sex+SibSp+Parch+Fare, data=df, family="binomial")
+print(summary(logit))
+print(logit)
+print(round(exp(-0.353892),3))
+
+#########################################################################
+
 data <- read.csv("data/data.csv", header=T, fileEncoding="EUC-KR")
 data1 <- subset(data, data$성별 == "남자")
 data2 <- subset(data, data$성별 == "여자")
@@ -45,11 +91,8 @@ versicolor <-  subset(iris,Species == 'versicolor')
 virginica <-  subset(iris,Species == 'virginica')
 
 t.test(setosa_data$Petal.Length,versicolor$Petal.Length)
-
 t.test(setosa_data$Petal.Length,virginica$Petal.Length)
-
 t.test(setosa_data$Petal.Length,setosa_data$Sepal.Length, paired=TRUE)
-
 t.test(setosa_data$Petal.Width,setosa_data$Sepal.Width, paired=TRUE)
 
 #########################################################################
@@ -140,7 +183,6 @@ x1
 x2 <- length(which(x$Class == "2nd" & x$Survived == "Yes"))
 x2
 x <- c(x1, x2)
-x
 
 props_result <- prop.test(x,n)
 props_result
