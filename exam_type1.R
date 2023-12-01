@@ -3,6 +3,17 @@
 #   EXAM TYPE 1
 #
 #########################################################################
+df = read.csv("data/mtcars.csv")
+
+minmax <- function (x) {
+  return ((x-min(x))/(max(x)-min(x)))
+}
+
+df$qsec <- minmax(df$qsec)
+
+print(sum(ifelse(df$qsec >0.5,1,0)))
+
+#########################################################################
 data <- read.csv("data/Boston.csv",header=T)
 ### check point
 data <- data[order(-data$crim),]
