@@ -3,6 +3,26 @@
 #   EXAM TYPE 2
 #
 #########################################################################
+
+# 1. library load
+library(dplyr)
+library(randomForest)
+library(pROC)
+library(caret)
+
+# 2. data load
+
+# 3. pre handler
+
+# 4. model
+
+# 5. predict 
+
+# 6. check
+
+# 7. write csv
+
+#########################################################################
 library(e1071)
 library(caret)
 library(pROC)
@@ -220,81 +240,6 @@ result$predict <- compute(model, norm_test[-length(norm_test)])$net.result
 accuracy(result$actual, result$predict)
 
 #########################################################################
-library(randomForest)
-library(caret)
-library(dplyr)
-library(e1071)
-
-# 데이터 로드 
-X_train = read.csv("data/X_train.csv", header=T, fileEncoding = "EUC-KR")
-y_train = read.csv("data/y_train.csv", header=T, fileEncoding = "EUC-KR")
-X_test = read.csv("data/X_test.csv", header=T, fileEncoding = "EUC-KR")
-
-# 전처리 
-X_train$환불금액  <- ifelse(is.na(X_train$환불금액),0,X_train$환불금액)
-X_test$환불금액  <- ifelse(is.na(X_test$환불금액),0,X_test$환불금액)
-
-X_train$총구매액  <- ifelse(is.na(X_train$총구매액),0,X_train$총구매액)
-X_test$총구매액  <- ifelse(is.na(X_test$총구매액),0,X_test$총구매액)
-
-X_train <- X_train %>% filter(총구매액 >= 0)
-X_train <- X_train %>% filter(최대구매액 >= 0)
-
-X_test <- X_test %>% filter(총구매액 >= 0)
-X_test <- X_test %>% filter(최대구매액 >= 0)
-
-X_train <- X_train %>% mutate_if(is.character, as.factor)
-X_test <- X_test %>% mutate_if(is.character, as.factor)
-
-y_train$gender <- as.factor(y_train$gencer)
-
-train <- merge(X_train, y_train, by="cust_id")
-test <- X_test
-
-# 분리 
-set.seed(123)
-idx <- sample(1:nrow(train),as.integer(nrow(train)*0.7))
-train_data <- train[idx,]
-valid_data <- train[-idx,]
-
-# 정규화 
-train_pre <- preProcess(train_data, method="range")
-valid_pre <- preProcess(valid_data, method="range")
-
-train_scaled <- predict(train_pre, train_data)
-valid_scaled <- predict(valid_pre, valid_data)
-
-train_data <- train_scaled
-valid_data <- valid_scaled
-
-# 모델생성 
-md.rf <- randomForest(gender~.-cust_id, data=train_data, ntree=300)
-md.glm <- train(gender~. -cust_id, data=train_data, mthod="glm" )
-md.svm <- svm(gender~. -cust_id, data=train_data, cost=10, gamma=0.01)
-
-# 예측 
-pred.rf <- predict(md.rf, newdata=valid_data)
-pred.glm <- predict(md.glm, newdata=valid_data)
-pred.svm <- predict(md.svm, newdata=valid_data)
-
-# 정확도 
-acc.rf <- caret::confusionMatrix(valid_data$gender, pred.rf)$overall[1]
-acc.glm <- caret::confusionMatrix(valid_data$gender, pred.glm)$overall[1]
-acc.svm <- caret:: confusionMatrix(valid_data$gender, pred.svm)$overall[1]
-
-print(acc.rf)
-print(acc.glm)
-print(acc.svm)
-
-# glm 선택 , train 데이터셋 전체로 모델링 
-md.fit <- train(gender~. - cust_id, data=train, medtho="glm")
-pred.fit <- predict(md.fit, newdata=test)
-
-df <- data.frame(custid=test$cust_id, gender=pred.fit)
-
-write.csv("result.csv", row.names=F)
-
-#########################################################################
 #라이브러리 로딩
 library(dplyr)
 library(randomForest)
@@ -305,14 +250,12 @@ library(caret)
 train = read.csv("data/customer_train.csv")
 test = read.csv("data/customer_test.csv")
 
-
 #전처리
 train$환불금액[is.na(train$환불금액)] <- 0
 test$환불금액[is.na(test$환불금액)] <- 0
 train$주구매상품 <- as.integer(train$주구매상품)
 test$주구매상품 <- as.integer(test$주구매상품)
 train$성별 <- as.factor(train$성별)
-
 
 #검증 위한 데이터 분리
 set.seed(23)
@@ -329,3 +272,52 @@ result <- data.frame(pred=pred)
 confusionMatrix(result$pred, val_y, mode="prec_recall")
 
 #########################################################################
+# 출력을 원할 경우 print() 함수 활용
+# 예시) print(df.head())
+
+# setwd(), getwd() 등 작업 폴더 설정 불필요
+# 파일 경로 상 내부 드라이브 경로(C: 등) 접근 불가
+
+# 사용자 코딩
+print("----------------1")
+library(dplyr)
+library(randomForest)
+library(pROC)
+library(caret)
+
+print("----------------2")
+train = read.csv("data/customer_train.csv")
+test = read.csv("data/customer_test.csv")
+
+#전처리
+print("----------------3")
+train$환불금액[is.na(train$환불금액)] <- 0
+test$환불금액[is.na(test$환불금액)] <- 0
+train$주구매상품 <- as.integer(train$주구매상품)
+test$주구매상품 <- as.integer(test$주구매상품)
+train$성별 <- as.factor(train$성별)
+print("----------------4")
+# id <- sample(1:nrow(data), as.integer(nrow(data)*0.7))
+test <- test[,-11]
+test$성별 <- '성별'
+print("----------------5")
+
+library(randomForest)
+rfmodel <- randomForest(성별 ~., train, ntree=100) 
+print("----------------6")
+
+new <- data.frame(actual=test$성별)
+new$predict <- predict(rfmodel, test)
+print("----------------7")
+
+library(pROC)
+result <-  roc(new$acutal, as.integer(new$predict))
+print("----------------8")
+names(result)
+print(result$auc)
+print("----------------9")
+
+# 답안 제출 참고
+# 아래 코드는 예시이며 변수명 등 개인별로 변경하여 활용
+# write.csv(data.frame변수,"result.csv",row.names = FALSE)
+
