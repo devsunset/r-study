@@ -235,8 +235,9 @@ df$Sex <- as.factor(df$Sex)
 df$SurviedText <- ifelse(df$Survived == 1, 'Alive','Dead')
 df$SurviedText <- as.factor(df$SurviedText)
 
+### check poing
 c_result <- chisq.test(df$Sex , df$SurviedText)
-# summary(t_result)
+summary(t_result)
 print(c_result$statistic)
 round(c_result$statistic,2)
 print(c_result$p.value)
@@ -249,10 +250,9 @@ if (c_result$p.value < 0.05){
 }
 
 ### check poing
-shapiro.test(df$Survived)
 logit <- glm(Survived~Sex+SibSp+Parch+Fare, data=df, family="binomial")
 print(summary(logit))
-logit$Coefficients
-round(exp(logit$Coefficients),3)
+print(logit)
+print(round(exp(-0.353892),3))
 
 #########################################################################
