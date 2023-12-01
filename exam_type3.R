@@ -235,21 +235,20 @@ df$Sex <- as.factor(df$Sex)
 df$SurviedText <- ifelse(df$Survived == 1, 'Alive','Dead')
 df$SurviedText <- as.factor(df$SurviedText)
 
-### check poing
-t_result <- chisq.test(df$Sex , df$SurviedText)
+c_result <- chisq.test(df$Sex , df$SurviedText)
 # summary(t_result)
-print(t_result$statistic)
-round(t_result$statistic,2)
-print(t_result$p.value)
-round(t_result$p.value,4)
+print(c_result$statistic)
+round(c_result$statistic,2)
+print(c_result$p.value)
+round(c_result$p.value,4)
 
-if (t_result$p.value < 0.05){
+if (c_result$p.value < 0.05){
     print("Reject of Null Hypothesis")
 }else{
     print("Accept of Null Hypothesis")
 }
 
-
+### check poing
 shapiro.test(df$Survived)
 logit <- glm(Survived~Sex+SibSp+Parch+Fare, data=df, family="binomial")
 print(summary(logit))
