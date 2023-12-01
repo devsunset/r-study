@@ -6,6 +6,7 @@
 data <- read.csv("data/data.csv", header=T, fileEncoding="EUC-KR")
 data1 <- subset(data, data$성별 == "남자")
 data2 <- subset(data, data$성별 == "여자")
+### check point
 t_result <- t.test(data1$쇼핑만족도,data2$쇼핑만족도)
 t_result
 
@@ -29,6 +30,7 @@ t_result
 
 data <- read.csv("data/data.csv", header=T, fileEncoding="EUC-KR")
 data <- subset(data, select=c(고객번호, 쇼핑1월, 쇼핑3월))
+### check point
 t_result <- t.test(data$쇼핑1월,data$쇼핑3월,paired=TRUE)
 t_result
 
@@ -71,6 +73,7 @@ t_result
 
 #########################################################################
 data <- read.csv("data/data.csv", header=T, fileEncoding="EUC-KR")
+### check point
 n1 <- length(which(data$주거지역 == "소도시"))
 n1
 n2 <- length(which(data$주거지역 == "중도시"))
@@ -84,6 +87,7 @@ x2
 x <- c(x1,x2)
 x
 
+### check point
 prop_result <- prop.test(x,n)
 prop_result
 
@@ -150,6 +154,7 @@ data1 <- subset(data, data$주거지역 == "소도시")
 data2<- subset(data, data$주거지역 == "중도시")
 data3<- subset(data, data$주거지역 == "대도시")
 
+### check point
 aov_result <- aov(이용만족도 ~ 주거지역 , data)
 aov_result
 summary(aov_result)
@@ -162,6 +167,7 @@ aov_result
 summary(aov_result)
 
 data <- read.csv("data/data.csv", header=T, fileEncoding="EUC-KR")
+### check point
 aov_data <- as.data.frame(rbind(cbind(data$이용만족도, 1), cbind(data$쇼핑만족도,2)))
 
 colnames(aov_data) <- c("만족도","구분")
@@ -186,14 +192,17 @@ data <- read.csv("data/height.csv",header=T)
 mean(data$h_after-data$h_before)
 round(mean(data$h_after-data$h_before),2)
 
+### check point
 t_result <- t.test(data$h_after , data$h_before, alternative="greater", paired=TRUE)
 
+### check point
 summar(t_result)
 print(t_result$statistic)
 round(t_result$statistic,2)
 print(t_result$p.value)
 round(t_result$p.value,4)
 
+### check point
 if (t_result$p.value < 0.05){
     print("Reject of Null Hypothesis")
 }else{
@@ -218,5 +227,33 @@ if (t_result$p.value < 0.05){
 }else{
     print("Accept of Null Hypothesis")
 }
+
+#########################################################################
+df <- read.csv("data/titanic.csv")
+
+df$Sex <- as.factor(df$Sex)
+df$SurviedText <- ifelse(df$Survived == 1, 'Alive','Dead')
+df$SurviedText <- as.factor(df$SurviedText)
+
+### check poing
+t_result <- chisq.test(df$Sex , df$SurviedText)
+# summary(t_result)
+print(t_result$statistic)
+round(t_result$statistic,2)
+print(t_result$p.value)
+round(t_result$p.value,4)
+
+if (t_result$p.value < 0.05){
+    print("Reject of Null Hypothesis")
+}else{
+    print("Accept of Null Hypothesis")
+}
+
+
+shapiro.test(df$Survived)
+logit <- glm(Survived~Sex+SibSp+Parch+Fare, data=df, family="binomial")
+print(summary(logit))
+logit$Coefficients
+round(exp(logit$Coefficients),3)
 
 #########################################################################
