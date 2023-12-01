@@ -4,6 +4,31 @@
 #
 #########################################################################
 
+df = read.csv("data/Titanic.csv")
+
+library(dplyr)
+options(scipen=999)
+options(digits=8)
+
+xtabs(~Gender+Survived, data=df)
+m <- xtabs(~Gender+Survived, data=df)
+print(head(m))
+
+chisq.test(m)
+# X-squared = 260.717, df = 1, p-value < 0.000000000000000222
+
+df <- glm(Survived~Gender+SibSp+Parch+Fare,data=df,family="binomial")
+print(df)
+
+# (Intercept)   Gendermale        SibSp        Parch         Fare  
+#    0.946635    -2.642219    -0.353892    -0.200724     0.014685  
+print(round(-0.200724,3))
+# -0.201
+
+print(round(exp(-0.353892),2))
+# 0.7
+
+#########################################################################
 ### check point
 t.test(data1$쇼핑만족도,data2$쇼핑만족도)
 
