@@ -6,19 +6,98 @@
 
 # 1. library load
 library(dplyr)
-library(randomForest)
-library(pROC)
 library(caret)
 
 # 2. data load
+data <- read.csv("data/train_commerce.csv", header=T)
+id <- sample(1:nrow(data), as.integer(nrow(data)*0.7))
+train <- data[id,]
+test <- data[-id,]
+train <- train[,-1]
+test <- test[,-1]
+train$Reached.on.Time_Y.N <- as.factor(train$Reached.on.Time_Y.N)
+test$Reached.on.Time_Y.N <- as.factor(test$Reached.on.Time_Y.N)
 
 # 3. pre handler
 
 # 4. model
+library(e1071)
+model <- svm(Reached.on.Time_Y.N ~., train, type="C-classification", kernel="radial", cost=10, gamma=0.1)
+
+library(e1071)
+svm <- svm(Species ~., train, type="C-classification")
+
+library(rpart)
+tree <- rpart(Species ~., data = train)
+
+library(randomForest)
+rfmodel <- randomForest(sex ~., train, ntree=100, proximity=TRUE) 
+
+trainmodel <- train(sex ~., train, method="rf", trControl=trainControl(method="cv",number=5), prox=TRUE, allowParallel=TRUE)
+
+library(party)
+forestmodel <- cforest(Sex~., train)
+new <- data.frame(actual=test$sex)
+
+model <- neuralnet(price~year+mileage+tax+mpg+engineSize, norm_train, hidden=c(5,5,5))
 
 # 5. predict 
+new <- data.frame(actual = test$Reached.on.Time_Y.N)
+new$predict <- predict(model, test, decision.values=TRUE)
+
+new_tree <- data.frame(actual=test$Species)
+new_tree$predict <- predict(tree, test, type="class")
+
+new <- data.frame(actual=test$sex)
+new$predict <- predict(rfmodel, test)
+
+new <- data.frame(actual= test$sex)
+new$predict <- predict(trainmodel, test)
+
+predict <- predict(forestmodel,newdata=test, OOB=TRUE, type="response")
+new$predict <- predict
+result <- F1_Score(new$predict, new$actual)
+result_validation_tree
+
+result <- data.frame(actual=test$price)
+result$predict <- compute(model, norm_test[-length(norm_test)])$net.result
+accuracy(result$actual, result$predict)
+
+##############################
+
+regression <- lm(price~year+mileage+tax+mpg+engineSize, train)
+regression_rslt <- data.frame(actual= test$price)
+regression_rslt$predict <- predict(regression,newdata=test)
+accuracy(regression_rslt$actual,regression_rslt$predict)
+
+decisiontree_rpart <- rpart(price~year+mileage+tax+mpg+engineSize, data=train)
+decisiontree_rpart_rslt <- data.frame(actual=test$price)
+decisiontree_rpart_rslt$predict <- predict(decisiontree_rpart, newdata=test, type="vector")
+accuracy(decisiontree_rpart_rslt$actual,decisiontree_rpart_rslt$predict)
+
+decisiontree_tree <- tree(price~year+mileage+tax+mpg+engineSize,data=train)
+decisiontree_tree_rslt <- data.frame(actual=test$price)
+decisiontree_tree_rslt$predict <- predict(decisiontree_tree, newdata=test, type="vector")
+accuracy(decisiontree_tree_rslt$actual,decisiontree_tree_rslt$predict)
+
+rfmodel <- train(price~year+mileage+tax+mpg+engineSize,data=train, method="rf", trControl=trainControl(method="cv",number=2), prox=TRUE, allowParallel=TRUE)
+rfmodel_rslt <- data.frame(actual=test$price)
+rfmodel_rslt$predict <- predict(rfmodel,newdata=test)
+accuracy(rfmodel_rslt$actual,rfmodel_rslt$predict)
+
+rfmodel2 <- cforest(price~year+mileage+tax+mpg+engineSize,data=train)
+rfmodel2_rslt <- data.frame(actual=test$price)
+rfmodel2_rslt$predict <- predict(rfmodel2,newdata=test)
+accuracy(rfmodel2_rslt$actual,rfmodel2_rslt$predict)
+
+rf <- randomForest(price~year+mileage+tax+mpg+engineSize, data=train, ntree=100, proxmity=TRUE)
+rf_rslt <- data.frame(actual=test$price)
+rf_rslt$predict <- predict(rf,newdat=test)
+accuracy(rf_rslt$actual, rf_rslt$predict)
 
 # 6. check
+library(pROC)
+roc(new$actual, as.integer(new$predict))$auc
 
 # 7. write csv
 
