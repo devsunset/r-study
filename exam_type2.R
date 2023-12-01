@@ -4,6 +4,91 @@
 #
 #########################################################################
 
+print('-----------------1')
+train = read.csv("data/customer_train.csv")
+test = read.csv("data/customer_test.csv")
+    
+print('-----------------2')
+library(dplyr)
+library(caret)
+# glimpse(train)
+# glimpse(test)
+
+print('-----------------3')
+train <- train%>%rename(gender ='성별')
+# glimpse(train)
+
+print('-----------------4')
+colSums(is.na(train))
+train$환불금액 <- ifelse(is.na(train$환불금액),0,train$환불금액)
+colSums(is.na(train))
+
+print('-----------------5')
+train$gender <- as.factor(train$gender)
+# glimpse(train)
+
+print('-----------------6')
+levels(train$gender) <- c("여성","남성")
+
+print('-----------------7')
+idx <- createDataPartition(train$gender, p=0.7, list=FALSE)
+train_example <- train[idx,]
+test_example <- train[-idx,]
+
+print('-----------------8')
+control <- trainControl(method="cv", number=5, summaryFunction=twoClassSummary, classProbs=TRUE)
+
+print('-----------------9')
+train <- train %>% select(-1)
+
+print('-----------------10')
+model_knn <- train(gender~., data=train, method="knn", preProcess=c("center","scale"),metric="ROC", trControl=control)
+
+print('-----------------11')
+colSums(is.na(test))
+test$환불금액 <- ifelse(is.na(test$환불금액),0,test$환불금액)
+colSums(is.na(test))
+
+print('-----------------12')
+predict(model_knn,test)
+
+print('-----------------13')
+df <- predict(model_knn, test)
+
+print('-----------------14')
+levels(df) <- c('0','1')
+
+print('-----------------15')
+result <- data.frame(pred=df)
+head(result)
+nrow(result)
+
+print('-----------------16')
+write.csv(result,"result.csv",row.names=FALSE)
+print(result)
+
+print('-----------------17')
+df <- predict(model_knn,test_example)
+confusionMatrix(test_example$gender,df)
+
+print('-----------------18')
+df1 <- as.numeric(df)
+library(pROC)
+roc(test_example$gender,df1)
+
+print('-----------------19')
+confusionMatrix(test_example$gender,df, mode="prec_recall" )
+
+
+
+
+
+
+
+
+
+
+#########################################################################
 # 1. library load
 library(dplyr)
 library(caret)
@@ -319,84 +404,5 @@ result$predict <- compute(model, norm_test[-length(norm_test)])$net.result
 accuracy(result$actual, result$predict)
 
 #########################################################################
-#라이브러리 로딩
-library(dplyr)
-library(randomForest)
-library(pROC)
-library(caret)
 
-#데이터
-train = read.csv("data/customer_train.csv")
-test = read.csv("data/customer_test.csv")
-
-#전처리
-train$환불금액[is.na(train$환불금액)] <- 0
-test$환불금액[is.na(test$환불금액)] <- 0
-train$주구매상품 <- as.integer(train$주구매상품)
-test$주구매상품 <- as.integer(test$주구매상품)
-train$성별 <- as.factor(train$성별)
-
-#검증 위한 데이터 분리
-set.seed(23)
-idx <- createDataPartition(train$성별,p=0.8)
-train <- train[idx$Resample1,]
-val <- train[idx$Resample1,]
-val_y <- val[,11]
-val <- val[,-11]
-
-#모델 학습 후 검증, 성능평가
-model <- randomForest(성별~., train)
-pred <- predict(model, val, type="class")
-result <- data.frame(pred=pred)
-confusionMatrix(result$pred, val_y, mode="prec_recall")
-
-#########################################################################
-# 출력을 원할 경우 print() 함수 활용
-# 예시) print(df.head())
-
-# setwd(), getwd() 등 작업 폴더 설정 불필요
-# 파일 경로 상 내부 드라이브 경로(C: 등) 접근 불가
-
-# 사용자 코딩
-print("----------------1")
-library(dplyr)
-library(randomForest)
-library(pROC)
-library(caret)
-
-print("----------------2")
-train = read.csv("data/customer_train.csv")
-test = read.csv("data/customer_test.csv")
-
-#전처리
-print("----------------3")
-train$환불금액[is.na(train$환불금액)] <- 0
-test$환불금액[is.na(test$환불금액)] <- 0
-train$주구매상품 <- as.integer(train$주구매상품)
-test$주구매상품 <- as.integer(test$주구매상품)
-train$성별 <- as.factor(train$성별)
-print("----------------4")
-# id <- sample(1:nrow(data), as.integer(nrow(data)*0.7))
-test <- test[,-11]
-test$성별 <- '성별'
-print("----------------5")
-
-library(randomForest)
-rfmodel <- randomForest(성별 ~., train, ntree=100) 
-print("----------------6")
-
-new <- data.frame(actual=test$성별)
-new$predict <- predict(rfmodel, test)
-print("----------------7")
-
-library(pROC)
-result <-  roc(new$acutal, as.integer(new$predict))
-print("----------------8")
-names(result)
-print(result$auc)
-print("----------------9")
-
-# 답안 제출 참고
-# 아래 코드는 예시이며 변수명 등 개인별로 변경하여 활용
-# write.csv(data.frame변수,"result.csv",row.names = FALSE)
 
