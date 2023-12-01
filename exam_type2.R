@@ -4,6 +4,59 @@
 #
 #########################################################################
 
+# 데이터 -> 라이브러리 -> 전처리 -> 분할 -> 모델 -> 예측 -> 결과 -> 검증 
+# 데라전분모예결검 
+
+# 1. 데이터 
+train = read.csv("data/customer_train.csv")
+test = read.csv("data/customer_test.csv")
+
+# 2. 라브러리 
+library(dplyr)
+library(caret)
+
+# 3. 전처리 
+# colSums(is.na(train))
+train <- train%>%rename(gender ='성별')
+train$환불금액 <- ifelse(is.na(train$환불금액),0,train$환불금액)
+train$gender <- as.factor(train$gender)
+test$환불금액 <- ifelse(is.na(test$환불금액),0,test$환불금액)
+levels(train$gender) <- c("여성","남성")
+
+# 5. 분할 
+idx <- createDataPartition(train$gender, p=0.7, list=FALSE)
+train_example <- train[idx,]
+test_example <- train[-idx,]
+
+# 6. 모델 (mnsc , dmpmt)
+control <- trainControl(method="cv", number=5, summaryFunction=twoClassSummary, classProbs=TRUE)
+train <- train %>% select(-1)
+model_knn <- train(gender~., data=train, method="knn", preProcess=c("center","scale"),metric="ROC", trControl=control)
+
+# 7. 예측 
+predict(model_knn,test)
+df <- predict(model_knn, test)
+levels(df) <- c('0','1')
+
+# 8. 결과 
+result <- data.frame(pred=df)
+write.csv(result,"result.csv",row.names=FALSE)
+
+# 9. 검증 
+df <- predict(model_knn,test_example)
+confusionMatrix(test_example$gender,df)
+
+df1 <- as.numeric(df)
+library(pROC)
+roc(test_example$gender,df1)
+
+confusionMatrix(test_example$gender,df, mode="prec_recall" )
+
+
+
+#########################################################################
+
+
 print('-----------------1')
 train = read.csv("data/customer_train.csv")
 test = read.csv("data/customer_test.csv")
@@ -79,14 +132,12 @@ roc(test_example$gender,df1)
 print('-----------------19')
 confusionMatrix(test_example$gender,df, mode="prec_recall" )
 
-
-
-
-
-
-
-
-
+# x, y : 병합할 데이터 프레임
+# by : 병합 기준 칼럼(key)
+# inner_join(x, y, by, ...) : 두 데이터 프레임에서 공통적으로 존재하는 모든 열을 병합하는 함수
+# left_join(x, y, by, ...) : 왼쪽 데이터 프레임을 기준으로 모든 열을 병합하는 함수
+# right_join(x, y, by, ...) : 오른쪽 데이터 프레임을 기준으로 모든 열을 병합하는 함수
+# full_join(x, y, by, ...) : 두 데이터 프레임에 존재하는 모든 열을 병합하는 함수
 
 #########################################################################
 # 1. library load
