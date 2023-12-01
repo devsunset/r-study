@@ -52,85 +52,71 @@ roc(test_example$gender,df1)
 
 confusionMatrix(test_example$gender,df, mode="prec_recall" )
 
+#########################################################################
+install.packages("mlbench")
+library(mlbench)
+data("Glass")
+library(dplyr)
+glimpse(Glass)
+table(Glass$Type)
+colSums(is.na(Glass))
+
+library(caret)
+zs_Glass <- preProcess(Glass,method=c("center","scale"))
+zs_Glass
+zs_Glass_p <- predict(zs_Glass,Glass)
+summary(zs_Glass_p)
+
+idx <- createDataPartition(zs_Glass_p$Type,p=0.6,list=FALSE)
+train <- Glass[idx,]
+valida <- Glass[-idx,]
+
+library(randomForest)
+rf_fit1 <- randomForest(Type~, data=train)
+rf_fit1
+
+pred_rf <- predict(rf_fit1, valida)
+glimpse(pred_rf)
+
+pred_rf_num <- as.numeric(pred_rf)
+library(pROC)
+multiclass.roc(valda$Type, pred_rf_num)
+confusionMatrix(valida$Type, pred_rf,mode='prec_recall')
+
+
+control <- trainControl(method="cv",number=5, summaryFunction = multiClassSummary,classProbs=TRUE)
+
+levels(train$Type) <- c('a','b','c','d','e','f','g')
+rf_knn <- train(Type~.. data=train, method="rf", preProcess=c("center","scale")
+                , metric="Mean_F1", trControl=control)
+
+rf_knn
+pred_rf_knn <- predict(rf_knn,valida)
+pred_rf_knn
+levels(valida$Type) <-c('a','b','c','d','e','f','g')
+confusionMatrix(valida$Type, pred_rf_knn,mode="prec_recall")
 
 
 #########################################################################
+library(mlbench)
+data("BostonHousing")
+colSums(is.na(BostonHousing))
+glimpse(BostonHousing)
 
 
-print('-----------------1')
-train = read.csv("data/customer_train.csv")
-test = read.csv("data/customer_test.csv")
-    
-print('-----------------2')
-library(dplyr)
+names(BostonHousing)
+ls()
+
+data("BostonHousing")
 library(caret)
-# glimpse(train)
-# glimpse(test)
+set.seed(26)
+idx <- createDataPartition(BostonHousing$medv,p=0.8,list=FALSE)
+train <- BostonHousing[idx,]
+test <- BostonHousing[-idx,]
+dim(train);dim(test)
 
-print('-----------------3')
-train <- train%>%rename(gender ='성별')
-# glimpse(train)
 
-print('-----------------4')
-colSums(is.na(train))
-train$환불금액 <- ifelse(is.na(train$환불금액),0,train$환불금액)
-colSums(is.na(train))
-
-print('-----------------5')
-train$gender <- as.factor(train$gender)
-# glimpse(train)
-
-print('-----------------6')
-levels(train$gender) <- c("여성","남성")
-
-print('-----------------7')
-idx <- createDataPartition(train$gender, p=0.7, list=FALSE)
-train_example <- train[idx,]
-test_example <- train[-idx,]
-
-print('-----------------8')
-control <- trainControl(method="cv", number=5, summaryFunction=twoClassSummary, classProbs=TRUE)
-
-print('-----------------9')
-train <- train %>% select(-1)
-
-print('-----------------10')
-model_knn <- train(gender~., data=train, method="knn", preProcess=c("center","scale"),metric="ROC", trControl=control)
-
-print('-----------------11')
-colSums(is.na(test))
-test$환불금액 <- ifelse(is.na(test$환불금액),0,test$환불금액)
-colSums(is.na(test))
-
-print('-----------------12')
-predict(model_knn,test)
-
-print('-----------------13')
-df <- predict(model_knn, test)
-
-print('-----------------14')
-levels(df) <- c('0','1')
-
-print('-----------------15')
-result <- data.frame(pred=df)
-head(result)
-nrow(result)
-
-print('-----------------16')
-write.csv(result,"result.csv",row.names=FALSE)
-print(result)
-
-print('-----------------17')
-df <- predict(model_knn,test_example)
-confusionMatrix(test_example$gender,df)
-
-print('-----------------18')
-df1 <- as.numeric(df)
-library(pROC)
-roc(test_example$gender,df1)
-
-print('-----------------19')
-confusionMatrix(test_example$gender,df, mode="prec_recall" )
+#########################################################################
 
 # x, y : 병합할 데이터 프레임
 # by : 병합 기준 칼럼(key)
